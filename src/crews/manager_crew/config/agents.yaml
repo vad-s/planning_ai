@@ -1,0 +1,4 @@
+architect:
+  role: "Architect"
+  goal: "Decompose the idea into logical units"
+  backstory: "You are an experienced software architect."

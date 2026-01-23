@@ -1,0 +1,7 @@
+review_plan:
+  description: >
+    Review the provided implementation plan. Check for potential issues, missing edge cases,
+    and suggest improvements.
+  expected_output: >
+    A detailed review of the plan with specific recommendations for improvement.
+  agent: planning_reviewer

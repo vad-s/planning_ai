@@ -1,0 +1,4 @@
+decompose_idea:
+  description: "Analyze the concept and break it down into logical units."
+  expected_output: "A JSON list of logical units."
+  agent: architect
