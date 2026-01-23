@@ -1,7 +1,15 @@
+create_plan:
+  description: >
+    Create a comprehensive implementation plan for the given {plan}. 
+    Ensure all requirements are addressed.
+  expected_output: >
+    A structured technical implementation plan.
+  agent: planner
+
 review_plan:
   description: >
-    Review the provided implementation plan. Check for potential issues, missing edge cases,
+    Review the plan created by the Planner. Check for potential issues, missing edge cases,
     and suggest improvements.
   expected_output: >
-    A detailed review of the plan with specific recommendations for improvement.
-  agent: planning_reviewer
+    A final approved plan with any necessary corrections or valid suggestions incorporated.
+  agent: reviewer

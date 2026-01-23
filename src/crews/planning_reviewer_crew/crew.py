@@ -28,17 +28,32 @@ class PlanningReviewerCrew:
         )
 
     @agent
-    def planning_reviewer(self) -> Agent:
+    def planner(self) -> Agent:
         return Agent(
-            config=self.agents_config["planning_reviewer"],
+            config=self.agents_config["planner"],
             verbose=True,
             llm=self.llm
+        )
+
+    @agent
+    def reviewer(self) -> Agent:
+        return Agent(
+            config=self.agents_config["reviewer"],
+            verbose=True,
+            llm=self.llm
+        )
+
+    @task
+    def create_plan(self) -> Task:
+        return Task(
+            config=self.tasks_config["create_plan"],
         )
 
     @task
     def review_plan(self) -> Task:
         return Task(
             config=self.tasks_config["review_plan"],
+            context=[self.create_plan()]
         )
 
     @crew
