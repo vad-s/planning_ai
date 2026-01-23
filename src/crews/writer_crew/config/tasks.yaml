@@ -1,0 +1,6 @@
+write_content:
+  description: >
+    Write content based on the provided topic or outline. Ensure clarity and accuracy.
+  expected_output: >
+    A well-written article or documentation page in Markdown format.
+  agent: writer
