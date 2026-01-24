@@ -1,0 +1,23 @@
+create_creative_plan:
+  description: >
+    Create a highly innovative and forward-thinking implementation plan for: {plan}.
+    Explore cutting-edge libraries and novel architectural patterns.
+  expected_output: >
+    A creative technical plan focusing on innovation.
+  agent: creative_planner
+
+create_balanced_plan:
+  description: >
+    Create a standard, industry-best-practice implementation plan for: {plan}.
+    Use well-known libraries and established patterns.
+  expected_output: >
+    A balanced technical plan focusing on reliability and standard practices.
+  agent: balanced_planner
+
+create_conservative_plan:
+  description: >
+    Create a highly stable and risk-averse implementation plan for: {plan}.
+    Stick to mature technologies and minimize complexity.
+  expected_output: >
+    A conservative technical plan focusing on stability and risk mitigation.
+  agent: conservative_planner
