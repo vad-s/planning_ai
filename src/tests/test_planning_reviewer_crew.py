@@ -25,8 +25,11 @@ def test_planning_reviewer_crew():
     print(f"Result Type: {type(result)}")
     print(f"Result: {result}")
     
-    if result:
-        print("Test Passed: Planning Reviewer Crew returned a result.")
+    # Check if result matches the mock reviewer output
+    if "Final Review" in str(result):
+        print("Test Passed: Planning Reviewer Crew returned expected final review.")
+    elif result:
+        print("Test Passed: Planning Reviewer Crew returned a result (content unchecked).")
     else:
         print("Test Failed: Planning Reviewer Crew returned None or empty result.")
 
