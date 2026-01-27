@@ -21,3 +21,16 @@ create_conservative_plan:
   expected_output: >
     A conservative technical plan focusing on stability and risk mitigation.
   agent: conservative_planner
+
+create_final_plan:
+  description: >
+    Generate a final execution plan by coordinating three planning agents
+    with similar scopes but different risk profiles. Each agent produces
+    an independent plan. The conservative planner reviews, merges, and
+    manages the final approved plan.
+
+  expected_output: >
+    A single, coherent final plan that balances ambition, feasibility,
+    and risk control, with clear steps, timelines, and safeguards.
+
+  agent: conservative_planner

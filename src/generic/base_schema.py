@@ -3,7 +3,10 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field
 
+
 class BaseSchema(BaseModel):
+    #model_config = {"frozen": True}
+
     id: uuid.UUID = Field(
         default_factory=uuid.uuid4, description="Stable unique identifier"
     )

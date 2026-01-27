@@ -21,8 +21,7 @@ azure_llm = LLM(
 )
 
 # Usage
-mock_llm = MockLLM(responses=["Final Answer: Test response 1", "Final Answer: Test response 2"])
-
+mock_llm = MockLLM(responses=["Pass to planners"])
 
 @CrewBase
 class ManagerCrew:
@@ -58,5 +57,5 @@ class ManagerCrew:
             agents=self.agents,
             tasks=self.tasks,
             process=Process.sequential,
-            verbose=True,planning_llm=self.llm
+            verbose=True
         )

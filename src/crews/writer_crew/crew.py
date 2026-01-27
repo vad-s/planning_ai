@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-mock_llm = MockLLM(responses=["Final Answer: Here is the written content."])
+mock_llm = MockLLM(responses=["Writer's Final Output"])
 
 @CrewBase
 class WriterCrew:
