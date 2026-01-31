@@ -32,6 +32,8 @@ class ManagerCrew:
 
     def __init__(self, use_mock=False):
         self.llm = mock_llm
+        #self.llm.responses[0] = "gkjgkkkg"
+        #self.i = 0
         #self.llm = fake_langchain_llm if use_mock else azure_llm
 
     @agent

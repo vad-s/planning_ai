@@ -1,4 +1,5 @@
-from typing import Dict, Optional, Union
+from typing import Dict, List, Optional, Union, Any, Deque
+from collections import deque
 
 from pydantic import Field
 from ..schemas.concept import Concept
@@ -9,6 +10,13 @@ class ProjectState(BaseSchema):
     title: str = "Project State"
     concept: Optional[Concept] = None
     all_done: bool = False
+    
+    # Queue-Based Workflow State
+    work_queue: Deque[Dict[str, Any]] = Field(default_factory=deque)
+    visited_queue: Deque[Dict[str, Any]] = Field(default_factory=deque)
+    current_item: Optional[Dict[str, Any]] = None
+    
+    # Legacy/Existing
     drafts: Dict[str, str] = Field(
         default_factory=dict
     )  # {"creative": ..., "balanced": ..., "conservative": ...}
