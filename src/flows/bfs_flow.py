@@ -11,6 +11,14 @@ from src.crews.manager_crew.crew import ManagerCrew
 from src.crews.reviewer_crew.crew import ReviewerCrew
 from src.crews.planners_crew.crew import PlannersCrew
 
+HIERARCHY_LEVELS = {
+    0: "concept",
+    1: "module",
+    2: "component",
+    3: "task",
+    4: "step"
+}
+
 class BFSFlow(Flow[ProjectState]):
     state: ProjectState
 
@@ -24,8 +32,9 @@ class BFSFlow(Flow[ProjectState]):
         
         # Initialize Queue with Root Concept
         root_item = {
-            "type": "concept",
+            "type": HIERARCHY_LEVELS[0], # "concept"
             "title": root_title,
+            "path": root_title, # Root path
             "id": str(self.state.concept.id),
             "level": 0,
             "status": WorkStatus.PENDING
@@ -133,36 +142,31 @@ class BFSFlow(Flow[ProjectState]):
 
             item['status'] = WorkStatus.WRITING
 
-            # Create Children (2-4 random)
-            start_type = item["type"]
-            type_order = ["concept", "module","component" , "task", "step"]
-            try:
-                curr_idx = type_order.index(start_type)
-                next_type = type_order[curr_idx + 1] if curr_idx + 1 < len(type_order) else None
-            except ValueError:
-                next_type = None
+            # Create Children
+            current_level = item["level"]
+            next_level = current_level + 1
+            next_type = HIERARCHY_LEVELS.get(next_level)
 
             item['new_children'] = []
             if next_type:
                 num_children = random.randint(0, 2)
-                print(f"Creating {num_children} children of type {next_type}")
+                print(f"Creating {num_children} children of type {next_type} (Level {next_level})")
                 for i in range(1, num_children + 1):
                     # Naming
-                    if start_type == "concept":
-                        child_title = f"Module {i}"
-                    else:
-                        child_title = f"{item['title']} > {next_type.capitalize()} {i}"
+                    child_title = f"{next_type.capitalize()} {i} of {item['title'][:15]}..."
+                    child_path = f"{item.get('path', item['title'])}/{child_title}"
                         
                     new_node = {
                         "type": next_type,
                         "title": child_title,
+                        "path": child_path,
                         "id": f"{item['id']}_{i}",
-                        "level": item["level"] + 1,
+                        "level": next_level,
                         "status": WorkStatus.PENDING
                     }
                     item['new_children'].append(new_node)
             else:
-                print("Leaf node, no children.")
+                print("Leaf node or Max Depth reached, no children.")
 
         else:
             print("No current item for writer.")
