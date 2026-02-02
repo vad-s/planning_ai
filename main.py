@@ -1,10 +1,10 @@
-from src.flows.bfs_flow import BFSFlow
-from src.state.state import ProjectState
+from src.flows.bfs_node_flow import BFSNodeFlow
+from src.state.node_state import NodeState
 
 def run_flow():
-    print("Starting BFSFlow...")
-    state = ProjectState()
-    flow = BFSFlow(state=state)
+    print("Starting BFSNodeFlow...")
+    state = NodeState()
+    flow = BFSNodeFlow(state=state)
     flow.kickoff()
     print("Flow execution complete.")
 
