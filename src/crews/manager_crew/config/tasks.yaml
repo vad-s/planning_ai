@@ -1,3 +1,19 @@
+architect_briefing_task:
+  description: >
+    1. Read the raw 'Idea' provided.
+    2. Translate this into a 'Project Brief' for Planners.
+    3. Ensure the 'Project Brief' requires: 
+       - Same API/DNA for all pillars.
+       - Local LLM + Hybrid RAG (Local files + Internet search).
+       - No hardware for now (put in Suggestion Pillar).
+    4. Generate a 'Planner Task' that forces them to split pillars into 
+       Small Doable Units (SDU) and find Local LLM/RAG fail points.
+  expected_output: >
+    A YAML document containing:
+    - project_description_for_planners: [The translated vision]
+    - planner_task_instructions: [The work order for the next agents]
+  agent: architect
+
 decompose_idea:
   description: "Analyze the concept and break it down into logical units."
   expected_output: "A JSON list of logical units."

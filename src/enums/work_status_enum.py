@@ -9,3 +9,4 @@ class WorkStatus(str, Enum):
     FINALIZING = "finalizing"
     DONE = "done"
     FAILED = "failed"
+    INITIALIZING = "initializing"

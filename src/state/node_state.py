@@ -4,12 +4,20 @@ from pydantic import Field
 
 from ..generic.base_schema import BaseSchema
 from ..generic.node import Node
-from ..schemas.concept import Concept
+from ..generic.init_idea import InitIdea
 
 class NodeState(BaseSchema):
     title: str = "Node Project State"
-    concept: Optional[Concept] = None
     all_done: bool = False
+    init_idea: Optional[InitIdea] = None
+    
+    # Initialization Config
+    save_folder: str = ""
+    project_name: str = ""
+    version: str = ""
+    overwrite: bool = False
+    output_path: str = ""
+
     
     # Queue-Based Workflow State using Node
     # Using Node directly. 

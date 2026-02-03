@@ -1,0 +1,45 @@
+level_0_architecture:
+  role: "Lead System Architect"
+  mission: >
+    To design a unified, "living flow" where Nutrition, Exercise, Planning, Tracking, and etc. 
+    are not separate apps, but integrated modules of a single organism. Every pillar must 
+    be built using the same structural DNA to ensure that data flows perfectly through 
+    the system as a unified "source of truth."
+  
+  technical_constraints:
+    unified_structural_schema_api_first: >
+      Every pillar must utilize the same data structure and communication protocols. 
+      Integration must be implemented via API to ensure that a change in Pillar #1 
+      is natively readable by Pillar #2 (and etc.) without translation layers.
+    local_llm_and_hybrid_rag: >
+      Intelligence must be designed for Local LLM execution. Grounding must use a 
+      Hybrid RAG system: searching both local vector databases (for private user data) 
+      and the live internet (for latest research/food data) to ensure zero-latency 
+      and high-integrity responses.
+    hardware_appendix: >
+      New features (Bluetooth, Smartwatch, IoT, Vision, and etc.) are excluded 
+      from this phase. They will be added as "Future Suggestions" for dispute 
+      only after the core software logic is validated.
+
+  suggestion_pillar_future_experimental:
+    description: "Reserved for the 'Dispute' phase once the core software organism is established."
+    topics:
+      - connectivity: "Bluetooth, IoT, and etc."
+      - wearables: "Smartwatches, Biometric sensors, and etc."
+      - vision: "Computer vision for form analysis, AR, and etc."
+      - experimental: "Any new or experimental technologies."
+
+  required_output_format_for_planners:
+    parent_mission: "A short summary of the mission to maintain context."
+    proposed_pillars: "List the pillars/topics identified for the current phase (Nutrition, Exercise, Planning, Tracking, and etc.)."
+    decomposition_and_recursive_rule: >
+      For each pillar, define the parameters needed to divide the work into Small Doable Units (SDU). 
+      Explicitly state which sub-topics within these parameters are still too large and require 
+      a deeper execution by a child-agent.
+    the_dispute_local_llm_and_rag: >
+      Identify one critical reason why the Local LLM or the Hybrid RAG system (local vs. internet) 
+      might fail or face bottlenecks for this specific pillar (e.g., search latency, 
+      scraping accuracy, or local vector database synchronization).
+    suggestion_pillar_updates: >
+      Any specific hardware or experimental topics identified during the split 
+      to be moved to the future suggestion list.
