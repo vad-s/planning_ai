@@ -3,8 +3,9 @@ from collections import deque
 from crewai.flow.flow import Flow, start, listen, or_
 from src.state.node_state import NodeState
 from src.enums.work_status_enum import WorkStatus
-from src.schemas.concept import Concept
 from src.generic.node import Node
+from src.generic.init_idea import InitIdea
+from src.flows.helpers import load_flow_config, load_init_idea, setup_output_directory
 
 from src.crews.writer_crew.crew import WriterCrew
 from src.crews.manager_crew.crew import ManagerCrew
@@ -20,30 +21,38 @@ class BFSNodeFlow(Flow[NodeState]):
     @start()
     def initialize_flow(self):
         print("BFS Node Flow initialized")
+        
+        # 1. Read config from resource file
+        config = load_flow_config("src/resources/flow_config.yaml")
+        
+        # 2. Folder validation/creation
+        self.state.output_path = setup_output_directory(config)
+        print(f"Output path initialized: {self.state.output_path}")
+
+        # 3 Load Init Idea
+        self.state.init_idea = load_init_idea("src/resources/init_idea.yaml")
+
+        # 4. Initialize Root Node
         root_title = "Smart Home System Concept"
-        
-        # Initialize Root (Concept)
-        self.state.concept = Concept(title=root_title, description="Goal: " + root_title)
-        
-        # Initialize Root Node with configuration
         root = Node(
             title=root_title,
-            depth_limit=4, # 0=Concept, 1=Module, 2=Component, 3=Task, 4=Step
-            level_titles=["Concept", "Module", "Component", "Task", "Step"],
+            depth_limit=4, # 0=Idea, 1=Pillar, 2=Module, 3=Component, 4=Task
+            level_titles=["Idea", "Pillar", "Module", "Component", "Task"],
             level_statuses={
-                0: WorkStatus.PENDING,
+                0: WorkStatus.INITIALIZING,
                 1: WorkStatus.PENDING,
                 2: WorkStatus.PENDING,
                 3: WorkStatus.PENDING,
                 4: WorkStatus.PENDING,
             },
+            status=WorkStatus.INITIALIZING,
         )
         
         # Explicitly use deque of Nodes
         self.state.work_queue = deque([root])
         print(f"Queue initialized with: {root.title} ({root.status}) at level {root.level}")
-
-    @listen(or_(initialize_flow, "run_writer"))
+        
+    @listen(or_("initialize_flow", "writer_done"))    
     def run_manager(self):
         # 1. Finalize Previous Item
         if self.state.current_item and self.state.current_item.status == WorkStatus.WRITING:
@@ -92,9 +101,13 @@ class BFSNodeFlow(Flow[NodeState]):
             print("Calling Manager Crew...")
             # Use item.level to determine type name if needed via level_titles
             type_name = item.get_title_for_level(item.level) or "Unknown"
-            inputs = {"idea": item.title, "type": type_name}
+            
+            # Conditionally send the idea
+            idea_to_send = self.state.init_idea.model_dump() if item.status == WorkStatus.INITIALIZING else "none"
+            
+            inputs = {"idea": idea_to_send, "type": type_name}
             try:
-                result = ManagerCrew().crew().kickoff(inputs=inputs)
+                result = ManagerCrew(idea=idea_to_send).crew().kickoff(inputs=inputs)
                 print(f"Manager Output: {result}")
             except Exception as e:
                 print(f"Manager Crew Call Failed (Mocking continuation): {e}")
@@ -122,8 +135,9 @@ class BFSNodeFlow(Flow[NodeState]):
 
             item.status = WorkStatus.PLANNING
             self.state.current_item = item
+            return "run_reviewer"
 
-    @listen(run_planners)
+    @listen("run_planners")
     def run_reviewer(self):
         item = self.state.current_item
         if item:
@@ -139,8 +153,9 @@ class BFSNodeFlow(Flow[NodeState]):
 
             item.status = WorkStatus.REVIEWING
             self.state.current_item = item
+            return "run_writer"
 
-    @listen(run_reviewer)
+    @listen("run_reviewer")
     def run_writer(self):
         item = self.state.current_item
         if item:
@@ -199,6 +214,8 @@ class BFSNodeFlow(Flow[NodeState]):
             else:
                  print("Max Depth limit reached, no children.")
 
+            return "writer_done"
         else:
             print("No current item for writer.")
+            return "writer_done"
         

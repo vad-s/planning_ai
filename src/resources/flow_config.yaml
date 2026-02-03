@@ -1,0 +1,4 @@
+save_folder: "output/bfs_runs"
+project_name: "fitness"
+version: "v1.0.0"
+overwrite: true
