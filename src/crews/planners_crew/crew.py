@@ -1,15 +1,11 @@
 import os
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
-from src.tests.fake_crewai_llm import MockLLM
+from src.generic.llm_utils import get_llm
+from src.enums.llm_name_enum import LLMName
 from dotenv import load_dotenv
 
 load_dotenv()
-
-mock_llm_creative = MockLLM(responses=["Final Answer: Creative Plan v1"])
-mock_llm_balanced = MockLLM(responses=["Final Answer: Balanced Plan v1: 60"])
-mock_llm_conservative = MockLLM(responses=["Creative Plan v1,Balanced Plan v1,Conservative Plan v1"])
-
 
 @CrewBase
 class PlannersCrew:
@@ -18,26 +14,13 @@ class PlannersCrew:
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
 
-    def __init__(self, use_mock=False, run_only=None, skip_final=False):
-        if use_mock:
-            self.llm_creative = mock_llm_creative
-            self.llm_balanced = mock_llm_balanced
-            self.llm_conservative = mock_llm_conservative
-        else:
-            base_config = {
-                "provider": "azure",
-                "model": os.getenv("AZURE_DEPLOYMENT", "gpt-4o-mini"),
-                "api_key": os.getenv("AZURE_API_KEY"),
-                "endpoint": os.getenv("AZURE_API_BASE"),
-                "api_version": os.getenv("AZURE_API_VERSION"),
-                "max_tokens": 80,
-            }
-            self.llm_creative = LLM(**base_config, temperature=1.0)
-            self.llm_balanced = LLM(**base_config, temperature=0.8)
-            self.llm_conservative = LLM(**base_config, temperature=0.6)
+    def __init__(self, llm_name: LLMName = LLMName.MOCK, run_only=None, skip_final=False):
+        self.llm_creative = get_llm(llm_name, "planners_crew_creative", temperature=1.0)
+        self.llm_balanced = get_llm(llm_name, "planners_crew_balanced", temperature=0.8)
+        self.llm_conservative = get_llm(llm_name, "planners_crew_conservative", temperature=0.6)
 
         self.run_only = run_only
-        self.skip_final = skip_final  # Skip final task on re-runs
+        self.skip_final = skip_final
 
     @agent
     def creative_planner(self) -> Agent:

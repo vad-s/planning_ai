@@ -10,8 +10,8 @@ architect_briefing_task:
        Small Doable Units (SDU) and find Local LLM/RAG fail points.
   expected_output: >
     A YAML document containing:
-    - project_description_for_planners: [The translated vision]
-    - planner_task_instructions: [The work order for the next agents]
+    - project_description_for_planners: [The translated vision] (maximum 250 tokens)
+    - planner_task_instructions: [The work order for the next agents] (maximum 250 tokens)
   agent: architect
 
 decompose_idea:

@@ -17,6 +17,7 @@ class NodeState(BaseSchema):
     version: str = ""
     overwrite: bool = False
     output_path: str = ""
+    crew_llm_types: Dict[str, str] = Field(default_factory=dict)
 
     
     # Queue-Based Workflow State using Node
