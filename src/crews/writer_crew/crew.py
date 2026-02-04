@@ -1,12 +1,11 @@
 import os
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
-from src.tests.fake_crewai_llm import MockLLM
+from src.generic.llm_utils import get_llm
+from src.enums.llm_name_enum import LLMName
 from dotenv import load_dotenv
 
 load_dotenv()
-
-mock_llm = MockLLM(responses=["Writer's Final Output"])
 
 @CrewBase
 class WriterCrew:
@@ -15,16 +14,8 @@ class WriterCrew:
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
 
-    def __init__(self, use_mock=False):
-        self.llm = mock_llm if use_mock else LLM(
-            provider="azure",
-            model=os.getenv("AZURE_DEPLOYMENT", "gpt-4o-mini"),
-            api_key=os.getenv("AZURE_API_KEY"),
-            endpoint=os.getenv("AZURE_API_BASE"),
-            api_version=os.getenv("AZURE_API_VERSION"),
-            temperature=0.7,
-            max_tokens=80,
-        )
+    def __init__(self, llm_name: LLMName = LLMName.MOCK):
+        self.llm = get_llm(llm_name, "writer_crew", temperature=0.7)
 
     @agent
     def writer(self) -> Agent:

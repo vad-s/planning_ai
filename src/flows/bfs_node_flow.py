@@ -11,6 +11,9 @@ from src.crews.writer_crew.crew import WriterCrew
 from src.crews.manager_crew.crew import ManagerCrew
 from src.crews.reviewer_crew.crew import ReviewerCrew
 from src.crews.planners_crew.crew import PlannersCrew
+from src.enums.llm_name_enum import LLMName
+from src.llm_prompt.task_prompt import TaskPrompt
+import yaml
 
 # Level mapping is now inside the Node configuration passed to Root
 # But we might need it for reference or just rely on the Node's logic.
@@ -28,6 +31,10 @@ class BFSNodeFlow(Flow[NodeState]):
         # 2. Folder validation/creation
         self.state.output_path = setup_output_directory(config)
         print(f"Output path initialized: {self.state.output_path}")
+
+        # 2.5 Read LLM Config
+        self.state.crew_llm_types = config.get("llm_type", {})
+        print(f"LLM configurations loaded: {self.state.crew_llm_types}")
 
         # 3 Load Init Idea
         self.state.init_idea = load_init_idea("src/resources/init_idea.yaml")
@@ -105,10 +112,24 @@ class BFSNodeFlow(Flow[NodeState]):
             # Conditionally send the idea
             idea_to_send = self.state.init_idea.model_dump() if item.status == WorkStatus.INITIALIZING else "none"
             
+            # Get configured LLM
+            llm_type_str = self.state.crew_llm_types.get("manager_crew", "mock")
+            llm_name = LLMName(llm_type_str)
+            
             inputs = {"idea": idea_to_send, "type": type_name}
             try:
-                result = ManagerCrew(idea=idea_to_send).crew().kickoff(inputs=inputs)
+                result = ManagerCrew(idea=idea_to_send, llm_name=llm_name).crew().kickoff(inputs=inputs)
                 print(f"Manager Output: {result}")
+                
+                # Parse raw string to TaskPrompt
+                try:
+                    parsed_data = yaml.safe_load(result.raw)
+                    task_prompt = TaskPrompt(**parsed_data)
+                    print(f"Successfully parsed Manager Output to TaskPrompt: {task_prompt}")
+                    # You could now use task_prompt.description and task_prompt.expected_output
+                except Exception as parse_err:
+                    print(f"Failed to parse Manager Output to TaskPrompt: {parse_err}")
+                    
             except Exception as e:
                 print(f"Manager Crew Call Failed (Mocking continuation): {e}")
 
@@ -126,9 +147,12 @@ class BFSNodeFlow(Flow[NodeState]):
             print(f"Planners processing: {item.title}")
             
             print("Calling Planners Crew...")
+            llm_type_str = self.state.crew_llm_types.get("planners_crew", "mock")
+            llm_name = LLMName(llm_type_str)
+            
             inputs = {"plan": f"Plan for {item.title}"}
             try:
-                result = PlannersCrew(use_mock=True).crew().kickoff(inputs=inputs)
+                result = PlannersCrew(llm_name=llm_name).crew().kickoff(inputs=inputs)
                 print(f"Planners Output: {result}")
             except Exception as e:
                 print(f"Planners Crew Call Failed: {e}")
@@ -144,9 +168,12 @@ class BFSNodeFlow(Flow[NodeState]):
             print(f"Reviewer processing: {item.title}")
             
             print("Calling Reviewer Crew...")
+            llm_type_str = self.state.crew_llm_types.get("reviewer_crew", "mock")
+            llm_name = LLMName(llm_type_str)
+            
             inputs = {"plan": f"Review plan for {item.title}"}
             try:
-                result = ReviewerCrew(use_mock=True).crew().kickoff(inputs=inputs)
+                result = ReviewerCrew(llm_name=llm_name).crew().kickoff(inputs=inputs)
                 print(f"Reviewer Output: {result}")
             except Exception as e:
                 print(f"Reviewer Crew Call Failed: {e}")
@@ -162,9 +189,12 @@ class BFSNodeFlow(Flow[NodeState]):
             print(f"Writer processing: {item.title}")
             
             print("Calling Writer Crew...")
+            llm_type_str = self.state.crew_llm_types.get("writer_crew", "mock")
+            llm_name = LLMName(llm_type_str)
+            
             inputs = {"content": f"Write content for {item.title}"}
             try:
-                result = WriterCrew(use_mock=True).crew().kickoff(inputs=inputs)
+                result = WriterCrew(llm_name=llm_name).crew().kickoff(inputs=inputs)
                 print(f"Writer Output: {result}")
             except Exception as e:
                 print(f"Writer Crew Call Failed: {e}")
