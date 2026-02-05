@@ -17,3 +17,40 @@ venv/
 .DS_Store
 .vscode/
 .idea/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Logs
+*.log
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Database
+*.db
+*.sqlite3
+
+# AI/ML specific
+models/
+checkpoints/
+*.pt
+*.pth
+*.onnx
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
