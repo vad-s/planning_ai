@@ -4,13 +4,13 @@ from pydantic import Field
 
 from ..generic.base_schema import BaseSchema
 from ..generic.node import Node
-from ..generic.init_idea import InitIdea
+
 
 class NodeState(BaseSchema):
     title: str = "Node Project State"
     all_done: bool = False
-    init_idea: Optional[InitIdea] = None
-    
+    project_vision: str = ""
+
     # Initialization Config
     save_folder: str = ""
     project_name: str = ""
@@ -19,13 +19,12 @@ class NodeState(BaseSchema):
     output_path: str = ""
     crew_llm_types: Dict[str, str] = Field(default_factory=dict)
 
-    
     # Queue-Based Workflow State using Node
-    # Using Node directly. 
+    # Using Node directly.
     work_queue: Deque[Node] = Field(default_factory=deque)
     visited_queue: Deque[Node] = Field(default_factory=deque)
     current_item: Optional[Node] = None
-    
+
     # Legacy/Existing (Keeping for compatibility if needed, or minimal)
     drafts: Dict[str, str] = Field(default_factory=dict)
     scores: Dict[str, int] = Field(default_factory=dict)

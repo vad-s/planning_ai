@@ -1,0 +1,21 @@
+init_vision: >
+  The fitness system is conceived as a fully personal, individual-centric 
+  platform that unifies training, nutrition, habits, and wellbeing into 
+  a seamless and coherent experience. It enables one person to track exercises,
+  workouts, meals, food composition, hydration, sleep and body metrics 
+  while receiving personalized insights and progression guidance derived entirely 
+  from self-reported data. The core experience is built around text-based interaction, 
+  structured data entry, adaptive recommendations, meaningful correlations, 
+  and a holistic view of lifestyle and performance. From the start, its architecture 
+  anticipates future privacy, compliance, and security frameworks, allowing the system 
+  to evolve into a fully regulated, secure, and consent-driven personal health environment. 
+  
+  In the initial phase, the system intentionally excludes smartwatches, sensors, video capture,
+  computer vision, IoT equipment, and any visual helper technologies. 
+  Privacy-and-compliance modules, as well as advanced security layers, are planned for future 
+  expansion and are not active in Phase 1; however, the foundation is designed with them in 
+  mind to ensure a smooth evolution as the platform grows. 
+  
+  Altogether, the system represents a holistic, privacy-conscious, security-aware personal 
+  fitness companion, grounded in self-reported data and human-driven interaction, ready to 
+  expand into sensor-based intelligence and richer technology layers when future phases begin.
