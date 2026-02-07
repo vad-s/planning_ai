@@ -7,6 +7,51 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+# Mock response variables - easy to modify for testing
+manager_crew_response = """
+```yaml
+project_brief: >
+  The fitness system aims to establish a fully personal and individual-centric platform that integrates various
+  domains of health and fitness, including training, nutrition, habits, and overall wellbeing. It focuses on
+  providing a seamless and coherent user experience through tracking mechanisms for exercises, workouts, meals,
+  hydration, sleep, and body metrics, while delivering personalized insights based on self-reported data.
+  The design emphasizes text-based interaction, structured data entry, adaptive recommendations, and a
+  holistic view of lifestyle and performance. Importantly, the architecture is built with future privacy,
+  compliance, and security considerations, ensuring a secure, consent-driven environment for personal health.
+  In Phase 1, the system purposefully excludes the integration of smartwatches, sensors, and any other
+  visual or IoT technologies. Future enhancements will incorporate advanced privacy and security functionalities,
+  establishing a robust foundation for the platform's evolution.
+
+planner_instructions: >
+  Planners are instructed to identify and enumerate all major components implied by the Vision statement provided.
+  Each part should be described with a clear name and a concise description that encapsulates its function within
+  the system. Additionally, planners are encouraged to consider any relevant details that may enhance the
+  understanding of each component. The focus should remain on structural aspects rather than features, ensuring
+  a modular approach that aligns with the integrated fitness ecosystem concept.
+
+planner_expected_outputs:
+  - A detailed list of major parts, each with:
+      - Name
+      - Description
+      - Relevant details (optional)
+```
+"""
+
+planners_crew_creative_response = "Final Answer: Creative Plan v1"
+
+planners_crew_balanced_response = "Final Answer: Balanced Plan v1: 60"
+
+planners_crew_conservative_response = (
+    "Creative Plan v1,Balanced Plan v1,Conservative Plan v1"
+)
+
+reviewer_crew_response = "creative: 75, balanced: 60, conservative: 80"
+
+writer_crew_response = "Writer's Final Output"
+
+default_mock_response = "Default Mock Response"
+
+
 def get_llm(
     llm_name: LLMName,
     crew_name: str = None,
@@ -21,21 +66,17 @@ def get_llm(
         if responses:
             return MockLLM(responses=responses)
 
-        # Default mock responses per crew if not provided
+        # Default mock responses per crew
         default_responses = {
-            "manager_crew": [
-                "project_description_for_planners: |-\n  Vision\n  Build a living flow fitness ecosystem where Nutrition, Exercise, Planning, Tracking, Insights, and a future Suggestion Pillar share a single API-first DNA. The system runs primarily on-device to guarantee privacy and zero-latency experiences, with Local LLM capabilities and a Hybrid RAG stack (Local vector stores plus optional Internet search) to keep responses relevant and up-to-date. No hardware investments are assumed in this phase; hardware considerations are captured in the Suggestion Pillar for future-work planning.\n\n  Unified API DNA\n  - All Pillars implement a single, versioned API contract (v1) that governs core entities, actions, and queries.\n  - Canonical data models (UserProfile, Plan, Meal, Exercise, Log, Insight, Notification) are shared across Pillars with pillar-specific extensions plumbed through the same endpoints.\n  - Endpoints (Create, Read, Update, Delete, Query, Summarize, Link, Notify) use identical payload shapes: { id, type, action, payload, context, metadata, version }.\n  - Inter-Pillar references use universal IDs to enable cross-pillar narratives (e.g., a single Plan referenced by both Nutrition and Planning).\n  - A local Event Bus enforces decoupled, auditable message passing with strict schema validation to ensure Pillars are always readable by any other Pillar.\n\n  Local-first Architecture\n  - Orchestrator: A lightweight on-device orchestrator routes requests to Pillars via the shared API surface. It handles LLM/RAG orchestration, caching, and conflict resolution.\n  - Local LLM: Each user environment ships with a local LLM for natural-language tasks, context management, and on-device reasoning. The LLM operates within a defined memory budget and privacy envelope.\n  - Hybrid RAG: \n    - Local vector stores hold personal documents, recipes, workouts, plans, and logs for fast, private retrieval.\n    - Internet search is optional and gated by the user’s privacy settings; results are re-scored against local knowledge before presentation.\n  - Privacy by design: All data remains on-device by default; cloud sync is opt-in with explicit user consent and strong encryption.\n\n  Pillars and SDU-oriented Growth\n  - Nutrition Pillar: meals, macros, shopping lists, and dietary goals.\n  - Exercise Pillar: workouts, sessions, progress tracking, and form/style guidance.\n  - Planning Pillar: goals, schedules, progression pathways, and milestone tracking.\n  - Tracking Pillar: day-to-day logs, metrics, and trend analysis.\n  - Insights Pillar: cross-pillar analytics, personalized recommendations, and nudges.\n  - Suggestion Pillar (future hardware considerations): capture hardware-readiness, sensor integration, and offline-capable hardware pathways to be evaluated later.\n\n  Non-functional and Roadmap\n  - Latency: on-device processing targeted to near-instant responses for common tasks; heavy computations pass through efficient local LLM/RAG pipelines.\n  - Privacy: strict on-device data handling; opt-in remote features audited and controlled by the user.\n  - Extensibility: API-first contracts enable new Pillars and data types without changing the cross-Pillar API.\n  - Hardware: hardware considerations are deferred to the Suggestion Pillar for evaluation in a future phase.\n\nplanner_task_instructions: |-\n  Objective\n  - Produce an implementable, API-first plan by decomposing the living flow into Small Doable Units (SDUs) per pillar, ensuring a single, shared API DNA across all pillars, and mapping Local LLM/RAG usage with concrete failure points and mitigations."
-            ],
-            "planners_crew_creative": ["Final Answer: Creative Plan v1"],
-            "planners_crew_balanced": ["Final Answer: Balanced Plan v1: 60"],
-            "planners_crew_conservative": [
-                "Creative Plan v1,Balanced Plan v1,Conservative Plan v1"
-            ],
-            "reviewer_crew": ["creative: 75, balanced: 60, conservative: 80"],
-            "writer_crew": ["Writer's Final Output"],
+            "manager_crew": [manager_crew_response],
+            "planners_crew_creative": [planners_crew_creative_response],
+            "planners_crew_balanced": [planners_crew_balanced_response],
+            "planners_crew_conservative": [planners_crew_conservative_response],
+            "reviewer_crew": [reviewer_crew_response],
+            "writer_crew": [writer_crew_response],
         }
         return MockLLM(
-            responses=default_responses.get(crew_name, ["Default Mock Response"])
+            responses=default_responses.get(crew_name, [default_mock_response])
         )
 
     # 2. Handle Azure LLM

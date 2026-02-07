@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 @CrewBase
 class ManagerCrew:
     """Manager Crew"""
@@ -16,44 +17,37 @@ class ManagerCrew:
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
 
-    def __init__(self, llm_name: LLMName = LLMName.MOCK, idea=None):
+    def __init__(self, llm_name: LLMName = LLMName.MOCK, is_initializing: bool = True):
         self.llm = get_llm(llm_name, "manager_crew")
-        self.idea = idea
+        self.is_initializing = is_initializing
 
     @agent
     def architect(self) -> Agent:
         print(f"DEBUG: Architect Agent LLM passed: {self.llm}")
-        return Agent(
-           config=self.agents_config["architect"],
-            verbose=True,
-            llm=self.llm
-        )
+        return Agent(config=self.agents_config["architect"], verbose=True, llm=self.llm)
 
     @task
     def decompose_idea(self) -> Task:
         return Task(
             config=self.tasks_config["decompose_idea"],
-            #output_pydantic=DecomposedIdea
+            # output_pydantic=DecomposedIdea
         )
 
     @task
-    def architect_briefing_task(self) -> Task:
+    def vision_init_task(self) -> Task:
         return Task(
-            config=self.tasks_config["architect_briefing_task"],
-            #output_pydantic=TaskPrompt
+            config=self.tasks_config["vision_init_task"],
+            # output_pydantic=TaskPrompt
         )
 
     @crew
     def crew(self) -> Crew:
         # Determine which task to run
-        if self.idea == "none":
-            tasks = [self.decompose_idea()]
+        if self.is_initializing:
+            tasks = [self.vision_init_task()]
         else:
-            tasks = [self.architect_briefing_task()]
+            tasks = [self.decompose_idea()]
 
         return Crew(
-            agents=self.agents,
-            tasks=tasks,
-            process=Process.sequential,
-            verbose=True
+            agents=self.agents, tasks=tasks, process=Process.sequential, verbose=True
         )

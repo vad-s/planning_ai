@@ -1,4 +1,4 @@
- vision_init_task:
+vision_init_task:
   description: |
     1. Read the raw "Vision" provided.
     {vision}
@@ -6,15 +6,20 @@
 
       The "Project Brief" should include:
         - A concise summary of the system's purpose, scope, principles, and Phase 1 constraints.
-        - Explicit instructions for planners to identify all major zones (main parts) 
-        implied by the Vision and describe each zone with a name and short description.
+        - Explicit instructions for planners to identify all major parts 
+        implied by the Vision and describe each part with a name and short description.
   expected_output: >
     A YAML document containing:
       - project_brief: a concise planner-oriented summary of system purpose,
         scope, principles, and Phase 1 constraints
       - planner_instructions: explicit instruction for planners to identify
-        all major zones (main parts) implied by the Vision and describe each
-        zone with name and short description, except excludes features.
+        all major parts implied by the Vision and describe each part with name and short description, except excludes features.
+        But do not provide the list of parts, just instruct them to find it out by themselves based on the vision,
+        and that they should provide a name ,description and another relevant details, if you decide to add.
+      - planner_expected_outputs: a clear list of expected outputs from the planners, 
+        such as a list of major parts with names ,descriptions and another relevant details in YAML format.
+         
+  agent: architect
 
 architect_briefing_task:
   description: >
