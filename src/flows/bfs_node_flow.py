@@ -62,6 +62,8 @@ class BFSNodeFlow(Flow[NodeState]):
             f"Queue initialized with: {root.title} ({root.status}) at level {root.level}"
         )
 
+        return "run_manager"
+
     @listen(or_("initialize_flow", "writer_done"))
     def run_manager(self):
         # 1. Finalize Previous Item
@@ -115,21 +117,20 @@ class BFSNodeFlow(Flow[NodeState]):
             # Use item.level to determine type name if needed via level_titles
             type_name = item.get_title_for_level(item.level) or "Unknown"
 
-            # Conditionally send the idea
-            idea_to_send = (
-                self.state.project_vision
-                if item.status == WorkStatus.INITIALIZING
-                else "none"
-            )
+            is_initializing = item.status == WorkStatus.INITIALIZING
+            if is_initializing:
+                vision = self.state.project_vision
+            else:
+                vision = "none"
 
             # Get configured LLM
             llm_type_str = self.state.crew_llm_types.get("manager_crew", "mock")
             llm_name = LLMName(llm_type_str)
 
-            inputs = {"idea": idea_to_send, "type": type_name}
+            inputs = {"vision": vision, "type": type_name}
             try:
                 result = (
-                    ManagerCrew(idea=idea_to_send, llm_name=llm_name)
+                    ManagerCrew(llm_name=llm_name, is_initializing=is_initializing)
                     .crew()
                     .kickoff(inputs=inputs)
                 )
@@ -137,7 +138,17 @@ class BFSNodeFlow(Flow[NodeState]):
 
                 # Parse raw string to TaskPrompt
                 try:
-                    parsed_data = yaml.safe_load(result.raw)
+                    # Strip markdown code block markers
+                    raw_text = result.raw.strip()
+                    if raw_text.startswith("```yaml"):
+                        raw_text = raw_text[7:]
+                    elif raw_text.startswith("```"):
+                        raw_text = raw_text[3:]
+                    if raw_text.endswith("```"):
+                        raw_text = raw_text[:-3]
+                    raw_text = raw_text.strip()
+
+                    parsed_data = yaml.safe_load(raw_text)
                     task_prompt = TaskPrompt(**parsed_data)
                     print(
                         f"Successfully parsed Manager Output to TaskPrompt: {task_prompt}"
