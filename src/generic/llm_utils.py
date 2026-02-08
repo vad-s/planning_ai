@@ -23,19 +23,17 @@ project_brief: >
   establishing a robust foundation for the platform's evolution.
 
 planner_instructions: >
-  Planners are instructed to identify and enumerate all major components implied by the Vision statement provided.
+  You as a planner need to identify and enumerate all major components implied by the Vision statement provided.
   Each part should be described with a clear name and a concise description that encapsulates its function within
-  the system. Additionally, planners are encouraged to consider any relevant details that may enhance the
+  the system. Additionally, planner is encouraged to consider any relevant details that may enhance the
   understanding of each component. The focus should remain on structural aspects rather than features, ensuring
   a modular approach that aligns with the integrated fitness ecosystem concept.
 
-planner_expected_outputs:
-  - A detailed list of major parts, each with:
-      - Name
-      - Description
-      - Relevant details (optional)
+planner_expected_outputs: >
+  A detailed list of major parts, each with: Name, Description, and Relevant details 
 ```
 """
+designers_crew_creative_response = "Final Answer: Creative Design v1"
 
 planners_crew_creative_response = "Final Answer: Creative Plan v1"
 
@@ -69,7 +67,7 @@ def get_llm(
         # Default mock responses per crew
         default_responses = {
             "manager_crew": [manager_crew_response],
-            "planners_crew_creative": [planners_crew_creative_response],
+            "designer_creative_crew": [designers_crew_creative_response],
             "planners_crew_balanced": [planners_crew_balanced_response],
             "planners_crew_conservative": [planners_crew_conservative_response],
             "reviewer_crew": [reviewer_crew_response],

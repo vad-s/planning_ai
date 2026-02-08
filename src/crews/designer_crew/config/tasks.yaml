@@ -1,0 +1,9 @@
+review_plan:
+  description: >
+    Review the provided plans (Creative, Balanced, Conservative).
+    Evaluate the pros and cons of each.
+    Decide if the plans are sufficient to proceed.
+    Output "APPROVE" if good, or "RETRY" with specific feedback if improvements are needed.
+  expected_output: >
+    A final approved plan with "APPROVE" prefix, or feedback with "RETRY" prefix.
+  agent: reviewer
