@@ -1,5 +1,5 @@
 vision_init_task:
-  description: |
+  description: >
     1. Read the raw "Vision" provided.
     {vision}
     2. Translate this into a clear "Project Brief" intended for Planners.
@@ -17,8 +17,7 @@ vision_init_task:
         But do not provide the list of parts, just instruct them to find it out by themselves based on the vision,
         and that they should provide a name ,description and another relevant details, if you decide to add.
       - planner_expected_outputs: a clear list of expected outputs from the planners, 
-        such as a list of major parts with names ,descriptions and another relevant details in YAML format.
-         
+        such as a list of major parts with names ,descriptions and another relevant details in YAML format.         
   agent: architect
 
 architect_briefing_task:
@@ -37,7 +36,3 @@ architect_briefing_task:
     - planner_task_instructions: [The work order for the next agents] (maximum 250 tokens)
   agent: architect
 
-decompose_idea:
-  description: "Analyze the concept and break it down into logical units."
-  expected_output: "A JSON list of logical units."
-  agent: architect

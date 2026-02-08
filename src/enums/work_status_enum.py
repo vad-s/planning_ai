@@ -1,9 +1,10 @@
 from enum import Enum
 
+
 class WorkStatus(str, Enum):
     PENDING = "pending"
-    MANAGING= "managing"
-    PLANNING = "planning"
+    MANAGING = "managing"
+    DESIGNING = "designing"
     REVIEWING = "reviewing"
     WRITING = "writing"
     FINALIZING = "finalizing"

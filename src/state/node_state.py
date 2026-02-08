@@ -24,6 +24,7 @@ class NodeState(BaseSchema):
     work_queue: Deque[Node] = Field(default_factory=deque)
     visited_queue: Deque[Node] = Field(default_factory=deque)
     current_item: Optional[Node] = None
+    manager_output: Optional[Any] = None
 
     # Legacy/Existing (Keeping for compatibility if needed, or minimal)
     drafts: Dict[str, str] = Field(default_factory=dict)

@@ -1,26 +1,33 @@
 create_creative_plan:
   description: >
-    Create a highly innovative and forward-thinking implementation plan for: {plan}.
-    Explore cutting-edge libraries and novel architectural patterns.
+    {project_brief}
+    From the perspective of a Creative Product Designer, {description}.
+    Explore unconventional user experiences, novel interaction patterns,
+    and differentiated product ideas without being constrained by
+    existing implementations or technical limitations.
   expected_output: >
-    A creative technical plan focusing on innovation.
-  agent: creative_planner
+    A single, coherent final plan that balances ambition, feasibility,
+    and risk control, with clear steps, timelines, and safeguards.
+  agent: creative_product_designer1
 
 create_balanced_plan:
   description: >
-    Create a standard, industry-best-practice implementation plan for: {plan}.
-    Use well-known libraries and established patterns.
+    From the perspective of a Balanced Product Designer, {description}.
+    Propose well-rounded product design solutions that balance creativity,
+    feasibility, and user value while respecting known constraints and
+    practical considerations.
   expected_output: >
-    A balanced technical plan focusing on reliability and standard practices.
-  agent: balanced_planner
+    {expected_output}
+  agent: balanced_product_designer
 
 create_conservative_plan:
   description: >
-    Create a highly stable and risk-averse implementation plan for: {plan}.
-    Stick to mature technologies and minimize complexity.
+    From the perspective of a Conservative Product Designer, {description}.
+    Focus on safe, clear, and low-risk product design choices, favoring
+    proven interaction patterns and incremental improvements over novelty.
   expected_output: >
-    A conservative technical plan focusing on stability and risk mitigation.
-  agent: conservative_planner
+    {expected_output}
+  agent: conservative_product_designer
 
 create_final_plan:
   description: >
@@ -33,4 +40,4 @@ create_final_plan:
     A single, coherent final plan that balances ambition, feasibility,
     and risk control, with clear steps, timelines, and safeguards.
 
-  agent: conservative_planner
+  agent: conservative_product_designer

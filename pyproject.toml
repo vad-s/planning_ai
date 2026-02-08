@@ -35,3 +35,6 @@ include = ["src*"]
 [tool.pytest.ini_options]
 testpaths = ["src/tests"]
 python_files = ["test_*.py"]
+
+[tool.crewai]
+type = "flow"

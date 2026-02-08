@@ -1,6 +1,7 @@
 import random
 from collections import deque
 from crewai.flow.flow import Flow, start, listen, or_
+from src.crews.designer_crew.crew import DesignerCrew
 from src.state.node_state import NodeState
 from src.enums.work_status_enum import WorkStatus
 from src.generic.node import Node
@@ -9,7 +10,6 @@ from src.flows.helpers import load_flow_config, setup_output_directory
 from src.crews.writer_crew.crew import WriterCrew
 from src.crews.manager_crew.crew import ManagerCrew
 from src.crews.reviewer_crew.crew import ReviewerCrew
-from src.crews.planners_crew.crew import PlannersCrew
 from src.enums.llm_name_enum import LLMName
 from src.llm_prompt.task_prompt import TaskPrompt
 import yaml
@@ -153,42 +153,130 @@ class BFSNodeFlow(Flow[NodeState]):
                     print(
                         f"Successfully parsed Manager Output to TaskPrompt: {task_prompt}"
                     )
-                    # You could now use task_prompt.description and task_prompt.expected_output
+                    # Store task_prompt in state
+                    self.state.manager_output = task_prompt
                 except Exception as parse_err:
                     print(f"Failed to parse Manager Output to TaskPrompt: {parse_err}")
+                    self.state.manager_output = None
 
             except Exception as e:
                 print(f"Manager Crew Call Failed (Mocking continuation): {e}")
 
             item.status = WorkStatus.MANAGING
             self.state.current_item = item
-            return "run_planners"
+            return "run_designers"
         else:
             print("Queue empty. Flow Complete.")
             return "flow_complete"
 
     @listen("run_manager")
-    def run_planners(self):
+    def run_designers(self):
         item = self.state.current_item
         if item:
-            print(f"Planners processing: {item.title}")
+            print(f"Designers processing: {item.title}")
 
-            print("Calling Planners Crew...")
-            llm_type_str = self.state.crew_llm_types.get("planners_crew", "mock")
-            llm_name = LLMName(llm_type_str)
+            print("Calling Designers Crew...")
+            llm_creative_str = self.state.crew_llm_types.get(
+                "designer_creative_crew", "mock"
+            )
+            llm_name_creative = LLMName(llm_creative_str)
+            print(
+                f"LLM Config - Creative: {llm_creative_str}, Balanced: none, Conservative: none"
+            )
 
-            inputs = {"plan": f"Plan for {item.title}"}
+            # Use manager's parsed output as description for designers
+            if not self.state.manager_output:
+                raise ValueError("Manager output is None - cannot proceed to designers")
+
+            # project_brief = self.state.manager_output.project_brief
+            # description = self.state.manager_output.description
+            # expected_output = self.state.manager_output.expected_output
+            # print(f"Using manager's project_brief: {project_brief[:100]}...")
+            # print(f"Using manager's description: {description[:100]}...")
+            # print(f"Using manager's expected output: {expected_output[:100]}...")
+
+            # inputs = {
+            #     "project_brief": project_brief,
+            #     "description": description,
+            #     "expected_output": expected_output,
+            # }
+            inputs = {
+                "project_brief": "project_brief",
+                "description": "description",
+                "expected_output": "expected_output",
+            }
             try:
-                result = PlannersCrew(llm_name=llm_name).crew().kickoff(inputs=inputs)
-                print(f"Planners Output: {result}")
+                # Get configured LLM
+                llm_type_str = self.state.crew_llm_types.get("designer_crew", "mock")
+                llm_name = LLMName(llm_type_str)
+                result = DesignerCrew(llm_name=llm_name).crew().kickoff(inputs=inputs)
+                print(f"Designers Output: {result}")
             except Exception as e:
-                print(f"Planners Crew Call Failed: {e}")
+                print(f"Designers Crew Call Failed: {e}")
 
-            item.status = WorkStatus.PLANNING
+            item.status = WorkStatus.DESIGNING
             self.state.current_item = item
             return "run_reviewer"
 
-    @listen("run_planners")
+    # @listen("run_manager")
+    # def run_planners(self):
+    #     item = self.state.current_item
+    #     if item:
+    #         print(f"Planners processing: {item.title}")
+
+    #         print("Calling Planners Crew...")
+    #         llm_creative_str = self.state.crew_llm_types.get(
+    #             "planners_crew_creative", "mock"
+    #         )
+    #         llm_balanced_str = self.state.crew_llm_types.get(
+    #             "planners_crew_balanced", "mock"
+    #         )
+    #         llm_conservative_str = self.state.crew_llm_types.get(
+    #             "planners_crew_conservative", "mock"
+    #         )
+    #         llm_name_creative = LLMName(llm_creative_str)
+    #         llm_name_balanced = LLMName(llm_balanced_str)
+    #         llm_name_conservative = LLMName(llm_conservative_str)
+
+    #         print(
+    #             f"LLM Config - Creative: {llm_creative_str}, Balanced: {llm_balanced_str}, Conservative: {llm_conservative_str}"
+    #         )
+
+    #         # Use manager's parsed output as description for planners
+    #         if not self.state.manager_output:
+    #             raise ValueError("Manager output is None - cannot proceed to planners")
+
+    #         project_brief = self.state.manager_output.project_brief
+    #         description = self.state.manager_output.description
+    #         expected_output = self.state.manager_output.expected_output
+    #         print(f"Using manager's project_brief: {project_brief[:100]}...")
+    #         print(f"Using manager's description: {description[:100]}...")
+    #         print(f"Using manager's expected output: {expected_output[:100]}...")
+
+    #         inputs = {
+    #             "project_brief": project_brief,
+    #             "description": description,
+    #             "expected_output": expected_output,
+    #         }
+    #         try:
+    #             result = (
+    #                 PlannersCrew(
+    #                     llm_name_creative=llm_name_creative,
+    #                     # llm_name_balanced=llm_name_balanced,
+    #                     # llm_name_conservative=llm_name_conservative,
+    #                 )
+    #                 .crew()
+    #                 .kickoff(inputs=inputs)
+    #             )
+    #             print(f"Planners Output: {result}")
+    #         except Exception as e:
+    #             print(f"Planners Crew Call Failed: {e}")
+
+    #         item.status = WorkStatus.PLANNING
+    #         self.state.current_item = item
+    #         return "run_reviewer"
+
+    @listen("run_manager")
     def run_reviewer(self):
         item = self.state.current_item
         if item:
@@ -202,6 +290,15 @@ class BFSNodeFlow(Flow[NodeState]):
             try:
                 result = ReviewerCrew(llm_name=llm_name).crew().kickoff(inputs=inputs)
                 print(f"Reviewer Output: {result}")
+                result = (
+                    DesignersCrew(
+                        llm_name=llm_name,
+                        # llm_name_balanced=llm_name_balanced,
+                        # llm_name_conservative=llm_name_conservative,
+                    )
+                    .crew()
+                    .kickoff(inputs=inputs)
+                )
             except Exception as e:
                 print(f"Reviewer Crew Call Failed: {e}")
 
