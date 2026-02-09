@@ -16,24 +16,27 @@ class DesignerCrew:
     tasks_config = "config/tasks.yaml"
 
     def __init__(self, llm_name: LLMName = LLMName.MOCK):
-        self.llm = get_llm(llm_name, "designer_crew", temperature=0.7)
+        self.llm = get_llm(llm_name, "designer_crew_creative", temperature=0.7)
 
     @agent
-    def reviewer(self) -> Agent:
-        return Agent(config=self.agents_config["reviewer"], verbose=True, llm=self.llm)
+    def creative_product_designer(self) -> Agent:
+        return Agent(
+            config=self.agents_config["creative_product_designer"],
+            verbose=True,
+            llm=self.llm,
+        )
 
     @task
-    def review_plan(self) -> Task:
+    def create_creative_plan(self) -> Task:
         return Task(
-            config=self.tasks_config["review_plan"],
+            config=self.tasks_config["create_creative_plan"],
         )
 
     @crew
     def crew(self) -> Crew:
         return Crew(
-            agents=[self.reviewer()],
-            tasks=[self.review_plan()],
+            agents=[self.creative_product_designer()],
+            tasks=[self.create_creative_plan()],
             process=Process.sequential,
             verbose=True,
-            planning_llm=self.llm,
         )

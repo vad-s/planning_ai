@@ -1,9 +1,13 @@
-review_plan:
+create_creative_plan:
   description: >
-    Review the provided plans (Creative, Balanced, Conservative).
-    Evaluate the pros and cons of each.
-    Decide if the plans are sufficient to proceed.
-    Output "APPROVE" if good, or "RETRY" with specific feedback if improvements are needed.
+    From the perspective of a Creative Product Designer, 
+    Read the project brief:
+      {project_brief}
+    follow :
+      {description}.
+    Explore unconventional user experiences, novel interaction patterns,
+    and differentiated product ideas without being constrained by
+    existing implementations or technical limitations.
   expected_output: >
-    A final approved plan with "APPROVE" prefix, or feedback with "RETRY" prefix.
-  agent: reviewer
+   {expected_output}
+  agent: creative_product_designer
