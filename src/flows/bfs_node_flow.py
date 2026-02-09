@@ -188,26 +188,29 @@ class BFSNodeFlow(Flow[NodeState]):
             if not self.state.manager_output:
                 raise ValueError("Manager output is None - cannot proceed to designers")
 
-            # project_brief = self.state.manager_output.project_brief
-            # description = self.state.manager_output.description
-            # expected_output = self.state.manager_output.expected_output
+            task_prompt = self.state.manager_output
+            project_brief = task_prompt.project_brief
+            description = task_prompt.designer_instructions
+            expected_output = task_prompt.designer_expected_outputs
             # print(f"Using manager's project_brief: {project_brief[:100]}...")
             # print(f"Using manager's description: {description[:100]}...")
-            # print(f"Using manager's expected output: {expected_output[:100]}...")
+            # print(f"Using manager's expected output: {expected_output}")
 
-            # inputs = {
-            #     "project_brief": project_brief,
-            #     "description": description,
-            #     "expected_output": expected_output,
-            # }
             inputs = {
-                "project_brief": "project_brief",
-                "description": "description",
-                "expected_output": "expected_output",
+                "project_brief": project_brief,
+                "description": description,
+                "expected_output": expected_output,
             }
+            # inputs = {
+            #     "project_brief": "project_brief",
+            #     "description": "description",
+            #     "expected_output": "expected_output",
+            # }
             try:
                 # Get configured LLM
-                llm_type_str = self.state.crew_llm_types.get("designer_crew", "mock")
+                llm_type_str = self.state.crew_llm_types.get(
+                    "designer_crew_creative", "mock"
+                )
                 llm_name = LLMName(llm_type_str)
                 result = DesignerCrew(llm_name=llm_name).crew().kickoff(inputs=inputs)
                 print(f"Designers Output: {result}")
@@ -276,7 +279,7 @@ class BFSNodeFlow(Flow[NodeState]):
     #         self.state.current_item = item
     #         return "run_reviewer"
 
-    @listen("run_manager")
+    @listen("run_designers")
     def run_reviewer(self):
         item = self.state.current_item
         if item:
@@ -290,15 +293,6 @@ class BFSNodeFlow(Flow[NodeState]):
             try:
                 result = ReviewerCrew(llm_name=llm_name).crew().kickoff(inputs=inputs)
                 print(f"Reviewer Output: {result}")
-                result = (
-                    DesignersCrew(
-                        llm_name=llm_name,
-                        # llm_name_balanced=llm_name_balanced,
-                        # llm_name_conservative=llm_name_conservative,
-                    )
-                    .crew()
-                    .kickoff(inputs=inputs)
-                )
             except Exception as e:
                 print(f"Reviewer Crew Call Failed: {e}")
 

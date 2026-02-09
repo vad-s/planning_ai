@@ -4,6 +4,8 @@ version: "v1.0.0"
 
 llm_type:
   manager_crew: "mock"
+  designer_crew_creative: "mock"
+  designer_crew: "mock"
   planners_crew_creative: "mock"
   planners_crew_balanced: "mock"
   planners_crew_conservative: "mock"
