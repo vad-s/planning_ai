@@ -177,11 +177,19 @@ class BFSNodeFlow(Flow[NodeState]):
 
             print("Calling Designers Crew...")
             llm_creative_str = self.state.crew_llm_types.get(
-                "designer_creative_crew", "mock"
+                "designer_crew_creative", "mock"
+            )
+            llm_balanced_str = self.state.crew_llm_types.get(
+                "designer_crew_balanced", "mock"
+            )
+            llm_conservative_str = self.state.crew_llm_types.get(
+                "designer_crew_conservative", "mock"
             )
             llm_name_creative = LLMName(llm_creative_str)
+            llm_name_balanced = LLMName(llm_balanced_str)
+            llm_name_conservative = LLMName(llm_conservative_str)
             print(
-                f"LLM Config - Creative: {llm_creative_str}, Balanced: none, Conservative: none"
+                f"LLM Config - Creative: {llm_creative_str}, Balanced: {llm_balanced_str}, Conservative: {llm_conservative_str}"
             )
 
             # Use manager's parsed output as description for designers
@@ -207,12 +215,16 @@ class BFSNodeFlow(Flow[NodeState]):
             #     "expected_output": "expected_output",
             # }
             try:
-                # Get configured LLM
-                llm_type_str = self.state.crew_llm_types.get(
-                    "designer_crew_creative", "mock"
+                result = (
+                    DesignerCrew(
+                        llm_name_creative=llm_name_creative,
+                        llm_name_balanced=llm_name_balanced,
+                        llm_name_conservative=llm_name_conservative,
+                        is_conservative=True,  # Set to True to use only conservative designer
+                    )
+                    .crew()
+                    .kickoff(inputs=inputs)
                 )
-                llm_name = LLMName(llm_type_str)
-                result = DesignerCrew(llm_name=llm_name).crew().kickoff(inputs=inputs)
                 print(f"Designers Output: {result}")
             except Exception as e:
                 print(f"Designers Crew Call Failed: {e}")

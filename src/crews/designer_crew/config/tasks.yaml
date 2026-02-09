@@ -11,3 +11,28 @@ create_creative_plan:
   expected_output: >
    {expected_output}
   agent: creative_product_designer
+
+create_balanced_plan:
+  description: >
+    From the perspective of a Balanced Product Designer, Read the project brief:
+      {project_brief}
+    follow :
+      {description}.
+    Propose well-rounded product design solutions that balance creativity,
+    feasibility, and user value while respecting known constraints and
+    practical considerations.
+  expected_output: >
+    {expected_output}
+  agent: balanced_product_designer
+
+create_conservative_plan:
+  description: >
+    From the perspective of a Conservative Product Designer, Read the project brief:
+      {project_brief}
+    follow :
+      {description}.
+    Focus on safe, clear, and low-risk product design choices, favoring
+    proven interaction patterns and incremental improvements over novelty.
+  expected_output: >
+    {expected_output}
+  agent: conservative_product_designer
