@@ -102,6 +102,124 @@ Calling Reviewer Crew...
   to stay committed to their health objectives.                                                         
   ```
 """
+balanced_product_designer_response = """
+```yaml
+fitness_system_components:
+  - name: User Profile
+    description: A centralized repository for individual user data including demographics, fitness goals, and preferences.
+    relevant_details:
+      - Facilitates personalized insights and recommendations.
+      - Ensures data privacy and compliance by allowing users control over their information.
+
+  - name: Activity Tracker
+    description: Mechanism for users to log various physical activities, including workouts and exercises.
+    relevant_details:
+      - Supports structured data entry through text-based interaction.
+      - Provides analytics on performance over time to inform future training adaptations.
+
+  - name: Nutrition Log
+    description: Interface for users to record meals, snacks, and hydration intake.
+    relevant_details:
+      - Enables users to gain insights about their dietary habits and nutritional balance.
+      - Can prompt suggestions for healthier food choices based on user preferences and goals.
+
+  - name: Habit Tracker
+    description: Tool for users to set and monitor healthy habits surrounding fitness and wellbeing.
+    relevant_details:
+      - Encourages accountability through reminders and progress tracking.
+      - Integrates seamlessly with other components to provide a holistic view of user lifestyle.
+
+  - name: Sleep Monitor
+    description: A dedicated section for users to record and evaluate their sleep patterns and quality.
+    relevant_details:
+      - Offers insights into how sleep affects overall health and performance.
+      - May include recommendations for improving sleep habits based on user data.
+
+  - name: Body Metrics Dashboard
+    description: Interface for tracking physical metrics such as weight, body fat percentage, and muscle mass.
+    relevant_details:
+      - Allows users to visualize their progress toward health and fitness goals.
+      - Integrates data with activity and nutrition logs for comprehensive analysis.
+
+  - name: Personalized Insights Engine
+    description: AI-driven component providing tailored recommendations based on logged activities, nutrition, and metrics.
+    relevant_details:
+      - Utilizes adaptive algorithms to refine suggestions as user data grows over time.
+      - Focuses on encouraging user engagement through actionable insights.
+
+  - name: Data Security Framework
+    description: Underlying architecture ensuring user data privacy and compliance with regulations.
+    relevant_details:
+      - Emphasizes consent-driven data handling, allowing users to manage their data permissions.
+      - Prepares for future enhancements related to advanced privacy and security features.
+
+  - name: User Experience Interface
+    description: The overarching design that governs user interaction with all components.
+    relevant_details:
+      - Prioritizes an intuitive text-based interaction model.
+      - Ensures a seamless and coherent experience across all areas of the platform.
+      ```
+"""
+
+designer_crew_conservative_response = """
+```yaml
+components:
+  - name: User Profile Management
+    description: A secure module for users to create and manage their personal profiles, including health metrics, fitness goals, and preferences.  
+    relevant_details:
+      - Ensures user consent and privacy compliance.
+      - Allows for easy updates and modifications to personal data.
+
+  - name: Data Entry Interface
+    description: A structured text-based interface for users to input data regarding workouts, meals, hydration, sleep, and body metrics.
+    relevant_details:
+      - Utilizes proven interaction patterns for ease of use.
+      - Incorporates validation checks to ensure data accuracy.
+
+  - name: Activity Tracking System
+    description: A mechanism to log and track various fitness activities, including exercises, workouts, and nutrition intake.
+    relevant_details:
+      - Provides a clear overview of user activity history.
+      - Enables users to visualize their progress over time.
+
+  - name: Insights and Recommendations Engine
+    description: An analytical component that processes self-reported data to provide personalized insights and adaptive recommendations for health and fitness.
+    relevant_details:
+      - Utilizes historical data to enhance the relevance of recommendations.
+      - Focuses on incremental improvements to user habits and lifestyle.
+
+  - name: Holistic Health Dashboard
+    description: A centralized view that aggregates data from various domains of health and fitness, presenting a comprehensive overview of user wellbeing.
+    relevant_details:
+      - Designed for clarity and usability, ensuring users can easily interpret their health data.
+      - Allows for customization based on user preferences.
+
+  - name: Privacy and Security Framework
+    description: A foundational architecture ensuring that all user data is stored securely, with compliance to health data regulations and privacy standards.
+    relevant_details:
+      - Implements encryption and secure access protocols.
+      - Regularly updated to address emerging security threats.
+
+  - name: Feedback and Support System
+    description: An interface for users to provide feedback on the platform and access support resources, enhancing user engagement and satisfaction.
+    relevant_details:
+      - Encourages user input for continuous improvement of the platform.
+      - Provides clear pathways for addressing user concerns.
+
+  - name: Compliance and Regulatory Module
+    description: A component dedicated to ensuring that the platform adheres to relevant health regulations and privacy laws.
+    relevant_details:
+      - Regular audits and updates to maintain compliance.
+      - Facilitates user understanding of their rights and data usage.
+
+  - name: Future Enhancements Framework
+    description: A modular architecture designed to accommodate future integrations of IoT devices and advanced privacy features.
+    relevant_details:
+      - Ensures that the platform can evolve without compromising existing functionality.
+      - Focuses on maintaining a low-risk approach to new feature integration.
+```
+"""
+
 planners_crew_creative_response = "Final Answer: Creative Plan v1"
 
 planners_crew_balanced_response = "Final Answer: Balanced Plan v1: 60"
@@ -135,6 +253,8 @@ def get_llm(
         default_responses = {
             "manager_crew": [manager_crew_response],
             "designer_crew_creative": [designer_crew_creative_response],
+            "designer_crew_balanced": [balanced_product_designer_response],
+            "designer_crew_conservative": [designer_crew_conservative_response],
             "planners_crew_creative": [planners_crew_creative_response],
             "planners_crew_balanced": [planners_crew_balanced_response],
             "planners_crew_conservative": [planners_crew_conservative_response],
