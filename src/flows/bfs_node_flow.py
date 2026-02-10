@@ -11,7 +11,7 @@ from src.crews.writer_crew.crew import WriterCrew
 from src.crews.manager_crew.crew import ManagerCrew
 from src.crews.reviewer_crew.crew import ReviewerCrew
 from src.enums.llm_name_enum import LLMName
-from src.llm_prompt.task_prompt import TaskPrompt
+from src.llm_completion.manager_completion import ManagerCompletion
 import yaml
 
 # Level mapping is now inside the Node configuration passed to Root
@@ -149,14 +149,16 @@ class BFSNodeFlow(Flow[NodeState]):
                     raw_text = raw_text.strip()
 
                     parsed_data = yaml.safe_load(raw_text)
-                    task_prompt = TaskPrompt(**parsed_data)
+                    manager_output = ManagerCompletion(**parsed_data)
                     print(
-                        f"Successfully parsed Manager Output to TaskPrompt: {task_prompt}"
+                        f"Successfully parsed Manager Output to ManagerCompletion: {manager_output}"
                     )
-                    # Store task_prompt in state
-                    self.state.manager_output = task_prompt
+                    # Store manager_output in state
+                    self.state.manager_output = manager_output
                 except Exception as parse_err:
-                    print(f"Failed to parse Manager Output to TaskPrompt: {parse_err}")
+                    print(
+                        f"Failed to parse Manager Output to ManagerCompletion: {parse_err}"
+                    )
                     self.state.manager_output = None
 
             except Exception as e:
@@ -170,7 +172,7 @@ class BFSNodeFlow(Flow[NodeState]):
             return "flow_complete"
 
     @listen("run_manager")
-    def run_designers(self):
+    async def run_designers(self):
         item = self.state.current_item
         if item:
             print(f"Designers processing: {item.title}")
@@ -215,16 +217,21 @@ class BFSNodeFlow(Flow[NodeState]):
             #     "expected_output": "expected_output",
             # }
             try:
-                result = (
+                result = await (
                     DesignerCrew(
                         llm_name_creative=llm_name_creative,
                         llm_name_balanced=llm_name_balanced,
                         llm_name_conservative=llm_name_conservative,
-                        is_conservative=True,  # Set to True to use only conservative designer
+                        is_creative=True,  # Set to True to use only creative designer
                     )
                     .crew()
-                    .kickoff(inputs=inputs)
+                    .kickoff_async(inputs=inputs)
                 )
+                for task_output in result.tasks_output:
+                    if task_output.pydantic:
+                        print(task_output.pydantic)  # Structured object
+                    else:
+                        print(task_output.raw)  # Raw text fallback
                 print(f"Designers Output: {result}")
             except Exception as e:
                 print(f"Designers Crew Call Failed: {e}")

@@ -9,7 +9,26 @@ create_creative_plan:
     and differentiated product ideas without being constrained by
     existing implementations or technical limitations.
   expected_output: >
-   {expected_output}
+   """
+    Pydantic model for designer crew JSON response structure.
+
+    Standard JSON format :   
+      {
+        "agent_name": "balanced_product_designer",
+        "is_approved": false,
+        "components": [
+          {
+            "name": "Component Name",
+            "description": "Component description",
+            "relevant_details": [
+              "Detail 1",
+              "Detail 2"
+            ]
+          }
+        ]
+      }
+    """
+  async_execution: true
   agent: creative_product_designer
 
 create_balanced_plan:
@@ -22,7 +41,26 @@ create_balanced_plan:
     feasibility, and user value while respecting known constraints and
     practical considerations.
   expected_output: >
-    {expected_output}
+    """
+    Pydantic model for designer crew JSON response structure.
+
+    Standard JSON format :   
+      {
+        "agent_name": "balanced_product_designer",
+        "is_approved": false,
+        "components": [
+          {
+            "name": "Component Name",
+            "description": "Component description",
+            "relevant_details": [
+              "Detail 1",
+              "Detail 2"
+            ]
+          }
+        ]
+      }
+    """
+  async_execution: true
   agent: balanced_product_designer
 
 create_conservative_plan:
@@ -34,5 +72,34 @@ create_conservative_plan:
     Focus on safe, clear, and low-risk product design choices, favoring
     proven interaction patterns and incremental improvements over novelty.
   expected_output: >
-    {expected_output}
+    """
+    Pydantic model for designer crew JSON response structure.
+
+    Standard JSON format :   
+      {
+        "agent_name": "conservative_product_designer",
+        "is_approved": false,
+        "components": [
+          {
+            "name": "Component Name",
+            "description": "Component description",
+            "relevant_details": [
+              "Detail 1",
+              "Detail 2"
+            ]
+          }
+        ]
+      }
+    """
+  async_execution: true
   agent: conservative_product_designer
+
+# combine_plans:
+#   description: "Combine all outputs into list of outputs"
+#   expected_output: >
+#     A combined list of all designer outputs in JSON format.
+#   agent: combiner_agent
+#   context:  # Waits for both parallel tasks
+#     - create_creative_plan
+#     - create_balanced_plan
+#     - create_conservative_plan

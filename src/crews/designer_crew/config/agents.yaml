@@ -21,3 +21,8 @@ conservative_product_designer:
     Works under the Product Architect. Prefers proven patterns and
     incremental improvements, reducing uncertainty and ensuring
     reliability.
+
+# combiner_agent:
+#   role: "Plan Combiner"
+#   goal: "Combine creative balanced conservative outputs"
+#   backstory: "Expert at synthesizing different approaches"
