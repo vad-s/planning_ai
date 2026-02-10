@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class TaskPrompt(BaseModel):
+class ManagerCompletion(BaseModel):
     """
     Pydantic model for manager crew response structure.
     Matches the YAML structure in manager_crew_response from llm_utils.py
