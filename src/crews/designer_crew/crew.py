@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from src.generic.llm_utils import get_llm
@@ -18,12 +19,11 @@ class DesignerCrew:
 
     def __init__(
         self,
-        llm_name_creative: LLMName = LLMName.MOCK,
-        llm_name_balanced: LLMName = LLMName.MOCK,
-        llm_name_conservative: LLMName = LLMName.MOCK,
-        is_creative: bool = False,
+        llm_name_creative: Optional[LLMName] = None,
+        llm_name_balanced: Optional[LLMName] = None,
+        llm_name_conservative: Optional[LLMName] = None,
     ):
-        self.is_creative = is_creative
+
         self.llm_name_creative = llm_name_creative
         self.llm_name_balanced = llm_name_balanced
         self.llm_name_conservative = llm_name_conservative
@@ -66,7 +66,6 @@ class DesignerCrew:
         if self.llm_name_creative != LLMName.MOCK:
             return Task(
                 config=self.tasks_config["create_creative_plan"],
-                output_pydantic=DesignerCompletionJson,
             )
         return Task(config=self.tasks_config["create_creative_plan"])
 
@@ -94,31 +93,25 @@ class DesignerCrew:
             config=self.tasks_config["create_conservative_plan"],
         )
 
-    @task
-    def combine_plans(self) -> Task:
-        return Task(
-            description="Summarize",
-            agent=self.conservative_product_designer(),
-            async_execution=False,
-            context=[
-                self.create_creative_plan(),
-                self.create_balanced_plan(),
-                self.create_conservative_plan(),
-            ],
-            expected_output="Summary",
-        )
-
     @crew
     def crew(self) -> Crew:
-        # Use is_creative to select agents/tasks
-        # if self.is_creative:
-        #     agents = [self.creative_product_designer()]
-        #     tasks = [self.create_creative_plan()]
-        # else:
-        #     agents = [
-        #         self.balanced_product_designer(),
-        #         self.conservative_product_designer(),
-        #     ]
-        #     tasks = [self.create_balanced_plan(), self.create_conservative_plan()]
+        """Create crew with only the agents that have configured LLMs"""
+        agents = []
+        tasks = []
 
-        return Crew(agents=self.agents, tasks=self.tasks, process=Process.sequential)
+        # Add creative designer if configured (not None)
+        if self.llm_name_creative is not None:
+            agents.append(self.creative_product_designer())
+            tasks.append(self.create_creative_plan())
+
+        # Add balanced designer if configured (not None)
+        if self.llm_name_balanced is not None:
+            agents.append(self.balanced_product_designer())
+            tasks.append(self.create_balanced_plan())
+
+        # Add conservative designer if configured (not None)
+        if self.llm_name_conservative is not None:
+            agents.append(self.conservative_product_designer())
+            tasks.append(self.create_conservative_plan())
+
+        return Crew(agents=agents, tasks=tasks, process=Process.sequential)

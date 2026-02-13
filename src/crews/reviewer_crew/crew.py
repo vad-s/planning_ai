@@ -5,7 +5,13 @@ from src.generic.llm_utils import get_llm
 from src.enums.llm_name_enum import LLMName
 from dotenv import load_dotenv
 
+from src.llm_completion.designer_completion import (
+    DesignerCompletionJson,
+    DesignerOutputsList,
+)
+
 load_dotenv()
+
 
 @CrewBase
 class ReviewerCrew:
@@ -15,6 +21,7 @@ class ReviewerCrew:
     tasks_config = "config/tasks.yaml"
 
     def __init__(self, llm_name: LLMName = LLMName.MOCK):
+        self.llm_name = llm_name
         self.llm = get_llm(llm_name, "reviewer_crew", temperature=0.7)
 
     @agent
@@ -23,9 +30,12 @@ class ReviewerCrew:
 
     @task
     def review_plan(self) -> Task:
-        return Task(
-            config=self.tasks_config["review_plan"],
-        )
+        # Only use output_pydantic for non-mock LLMs
+        if self.llm_name != LLMName.MOCK:
+            return Task(
+                config=self.tasks_config["review_plan"],
+            )
+        return Task(config=self.tasks_config["review_plan"])
 
     @crew
     def crew(self) -> Crew:

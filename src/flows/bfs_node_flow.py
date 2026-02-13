@@ -1,4 +1,5 @@
 import random
+import asyncio
 from collections import deque
 from crewai.flow.flow import Flow, start, listen, or_
 from src.crews.designer_crew.crew import DesignerCrew
@@ -12,7 +13,9 @@ from src.crews.manager_crew.crew import ManagerCrew
 from src.crews.reviewer_crew.crew import ReviewerCrew
 from src.enums.llm_name_enum import LLMName
 from src.llm_completion.manager_completion import ManagerCompletion
+from src.llm_completion.designer_completion import DesignerCompletionJson
 import yaml
+import json
 
 # Level mapping is now inside the Node configuration passed to Root
 # But we might need it for reference or just rely on the Node's logic.
@@ -217,24 +220,87 @@ class BFSNodeFlow(Flow[NodeState]):
             #     "expected_output": "expected_output",
             # }
             try:
-                result = await (
-                    DesignerCrew(
-                        llm_name_creative=llm_name_creative,
-                        llm_name_balanced=llm_name_balanced,
-                        llm_name_conservative=llm_name_conservative,
-                        is_creative=True,  # Set to True to use only creative designer
-                    )
-                    .crew()
-                    .kickoff_async(inputs=inputs)
+                # Create three separate crews for concurrent execution
+                crew_creative = DesignerCrew(
+                    llm_name_creative=llm_name_creative,
+                    llm_name_balanced=None,
+                    llm_name_conservative=None,
+                ).crew()
+
+                crew_balanced = DesignerCrew(
+                    llm_name_creative=None,
+                    llm_name_balanced=llm_name_balanced,
+                    llm_name_conservative=None,
+                ).crew()
+
+                crew_conservative = DesignerCrew(
+                    llm_name_creative=None,
+                    llm_name_balanced=None,
+                    llm_name_conservative=llm_name_conservative,
+                ).crew()
+
+                # Run all concurrently with gather
+                results = await asyncio.gather(
+                    crew_creative.kickoff_async(inputs=inputs),
+                    crew_balanced.kickoff_async(inputs=inputs),
+                    crew_conservative.kickoff_async(inputs=inputs),
                 )
-                for task_output in result.tasks_output:
-                    if task_output.pydantic:
-                        print(task_output.pydantic)  # Structured object
-                    else:
-                        print(task_output.raw)  # Raw text fallback
-                print(f"Designers Output: {result}")
+
+                # Process results from all three crews and create list of DesignerCompletionJson
+                designer_outputs = []
+                for idx, result in enumerate(results):
+                    crew_name = ["Creative", "Balanced", "Conservative"][idx]
+                    print(f"\n{crew_name} Designer Output:")
+
+                    for task_output in result.tasks_output:
+                        if task_output.pydantic:
+                            # Use pydantic object directly
+                            print(f"{crew_name} - Using Pydantic output")
+                            designer_outputs.append(task_output.pydantic)
+                        elif task_output.raw:
+                            # Parse raw text as JSON for mock LLMs
+                            try:
+                                print(f"{crew_name} - Parsing raw output as JSON")
+                                raw_text = task_output.raw.strip()
+
+                                # Strip markdown code blocks if present
+                                if raw_text.startswith("```json"):
+                                    raw_text = raw_text[7:]
+                                elif raw_text.startswith("```"):
+                                    raw_text = raw_text[3:]
+                                if raw_text.endswith("```"):
+                                    raw_text = raw_text[:-3]
+                                raw_text = raw_text.strip()
+
+                                # Parse JSON and create DesignerCompletionJson
+                                parsed_json = json.loads(raw_text)
+                                designer_completion = DesignerCompletionJson(
+                                    **parsed_json
+                                )
+                                designer_outputs.append(designer_completion)
+                                print(
+                                    f"{crew_name} - Successfully parsed: {designer_completion.agent_name}"
+                                )
+                            except Exception as parse_err:
+                                raise Exception(
+                                    f"{crew_name} - Failed to parse raw output to DesignerCompletionJson: {parse_err}. "
+                                    f"Raw output preview: {raw_text[:200]}..."
+                                )
+                        else:
+                            raise Exception(
+                                f"{crew_name} - No pydantic or raw output available"
+                            )
+
+                # Store designer outputs in state
+                self.state.designer_outputs = designer_outputs
+                print(f"\nCollected {len(designer_outputs)} designer outputs")
+                for output in designer_outputs:
+                    print(
+                        f"  - {output.agent_name}: {len(output.components)} components"
+                    )
             except Exception as e:
                 print(f"Designers Crew Call Failed: {e}")
+                raise
 
             item.status = WorkStatus.DESIGNING
             self.state.current_item = item
@@ -308,8 +374,58 @@ class BFSNodeFlow(Flow[NodeState]):
             llm_type_str = self.state.crew_llm_types.get("reviewer_crew", "mock")
             llm_name = LLMName(llm_type_str)
 
-            inputs = {"plan": f"Review plan for {item.title}"}
+            # Prepare inputs for reviewer
+            if not self.state.manager_output:
+                raise ValueError("Manager output is None - cannot proceed to reviewer")
+            if not self.state.designer_outputs:
+                raise ValueError(
+                    "Designer outputs are empty - cannot proceed to reviewer"
+                )
+
+            project_brief = self.state.manager_output.project_brief
+
+            # Convert designer outputs to separate JSON strings for each agent
+            print(f"DEBUG: designer_outputs length: {len(self.state.designer_outputs)}")
+
+            # Initialize with empty objects
+            creative_json = "{}"
+            balanced_json = "{}"
+            conservative_json = "{}"
+
+            # Convert each output to JSON
+            for output in self.state.designer_outputs:
+                # Get dict representation
+                if hasattr(output, "model_dump"):
+                    output_dict = output.model_dump()
+                elif hasattr(output, "dict"):
+                    output_dict = output.dict()
+                else:
+                    output_dict = output
+
+                # Convert to JSON string
+                output_json = json.dumps(output_dict, indent=2)
+
+                # Assign to correct variable based on agent name
+                agent_name = output_dict.get("agent_name", "").lower()
+                if "creative" in agent_name:
+                    creative_json = output_json
+                    print(f"Assigned creative: {agent_name}")
+                elif "balanced" in agent_name:
+                    balanced_json = output_json
+                    print(f"Assigned balanced: {agent_name}")
+                elif "conservative" in agent_name:
+                    conservative_json = output_json
+                    print(f"Assigned conservative: {agent_name}")
+
+            inputs = {
+                "project_brief": project_brief,
+                "creative": creative_json,
+                "balanced": balanced_json,
+                "conservative": conservative_json,
+            }
+
             try:
+                # true to pydatnic output, false to raw string for testing parsing
                 result = ReviewerCrew(llm_name=llm_name).crew().kickoff(inputs=inputs)
                 print(f"Reviewer Output: {result}")
             except Exception as e:
