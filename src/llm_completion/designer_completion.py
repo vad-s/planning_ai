@@ -117,5 +117,24 @@ class DesignerCompletionJson(BaseModel):
         populate_by_name = True
 
 
+class DesignerOutputsList(BaseModel):
+    """
+    List of designer outputs for reviewer crew.
+
+    This wraps a list of DesignerCompletionJson objects for Pydantic validation.
+    """
+
+    root: List[DesignerCompletionJson] = Field(
+        ...,
+        description="List of designer outputs from creative, balanced, and conservative designers",
+    )
+
+    def __iter__(self):
+        return iter(self.root)
+
+    def __getitem__(self, item):
+        return self.root[item]
+
+
 # Alias for backward compatibility
 DesignerCompletion = DesignerCompletionYaml

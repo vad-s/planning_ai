@@ -1,9 +1,60 @@
 review_plan:
   description: >
-    Review the provided plans (Creative, Balanced, Conservative).
-    Evaluate the pros and cons of each.
-    Decide if the plans are sufficient to proceed.
-    Output "APPROVE" if good, or "RETRY" with specific feedback if improvements are needed.
-  expected_output: >
-    A final approved plan with "APPROVE" prefix, or feedback with "RETRY" prefix.
+    From the perspective of a Reviewer, Read the project brief:
+      {project_brief}
+    Review the provided Design Specifications (Creative, Balanced, Conservative).
+      Creative Design:
+     {creative}
+    
+    Balanced Design:
+     {balanced}
+    
+     Conservative Design:
+     {conservative}
+
+    Return a JSON array of exactly THREE items. Each item must strictly follow this schema:   
+    {
+        "agent_name": "agent_name",
+        "is_approved": false,
+        "components": [
+          {
+            "name": "Component Name",
+            "description": "Component description",
+            "relevant_details": [
+              "Detail 1",
+              "Detail 2"
+            ]
+          }
+        ]
+    }
+    "HARD RULES:"
+        1) Return EXACTLY three whole items , including all components per items.
+        2) Do not include any extra commentary or keys.
+        3) Ensure valid JSON (no trailing commas).
+        
+        Evaluate the pros and cons of each spec implicitly and set is_approved accordingly, 
+        but ONLY return the JSON array as the final output.
+
+  expected_output: >    
+    A array with 3 items following the schema above. Exactly 1 items are disapproved (false) "
+        "and 2 items are approved (true). No extra text
   agent: reviewer
+
+
+# review_plan:
+#   description: |
+#     Review the following three design specifications:
+    
+#     Creative Design:
+#     {creative}
+    
+#     Balanced Design:
+#     {balanced}
+    
+#     Conservative Design:
+#     {conservative}
+    
+#     Return a list of reviewed outputs.
+#   expected_output: |
+#     A JSON object with "items" key containing the list of reviewed outputs
+#   agent: reviewer

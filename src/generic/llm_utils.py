@@ -301,216 +301,196 @@ designer_crew_conservative_json = """
   }
 }
 """
-designer_crew_creative_pydantic = """
-DesignerCompletionJson(
-    agent_name='creative_product_designer',
-    is_approved=False,
-    components=[
-        ComponentDetail(
-            name='User Profile Management',
-            description='Central hub for users to manage personal information, preferences, and privacy settings.',
-            relevant_details=[
-                'Facilitates user onboarding and customization.',
-                'Ensures compliance with privacy regulations.'
+designer_crew_creative_pydantic = """{
+    "agent_name": "creative_product_designer",
+    "is_approved": false,
+    "components": [
+        {
+            "name": "User Profile Management",
+            "description": "Central hub for users to manage personal information, preferences, and privacy settings.",
+            "relevant_details": [
+                "Facilitates user onboarding and customization.",
+                "Ensures compliance with privacy regulations."
             ]
-        ),
-        ComponentDetail(
-            name='Activity Tracker',
-            description='Mechanism for users to log exercises, workouts, and physical activities.',
-            relevant_details=[
-                'Supports text-based entry for activities.',
-                'Utilizes adaptive algorithms to suggest future activities.'
+        },
+        {
+            "name": "Activity Tracker",
+            "description": "Mechanism for users to log exercises, workouts, and physical activities.",
+            "relevant_details": [
+                "Supports text-based entry for activities.",
+                "Utilizes adaptive algorithms to suggest future activities."
             ]
-        ),
-        ComponentDetail(
-            name='Nutrition Log',
-            description='Allows users to track meals, hydration, and nutritional intake.',
-            relevant_details=[
-                'Incorporates a structured data entry format for easy logging.',
-                'Provides personalized dietary recommendations based on user data.'
+        },
+        {
+            "name": "Nutrition Log",
+            "description": "Allows users to track meals, hydration, and nutritional intake.",
+            "relevant_details": [
+                "Incorporates a structured data entry format for easy logging.",
+                "Provides personalized dietary recommendations based on user data."
             ]
-        ),
-        ComponentDetail(
-            name='Habit Formation Module',
-            description='Tool for users to set, track, and modify lifestyle habits.',
-            relevant_details=[
-                'Encourages positive behavior changes through reminders.',
-                'Utilizes gamification to enhance user engagement.'
+        },
+        {
+            "name": "Habit Formation Module",
+            "description": "Tool for users to set, track, and modify lifestyle habits.",
+            "relevant_details": [
+                "Encourages positive behavior changes through reminders.",
+                "Utilizes gamification to enhance user engagement."
             ]
-        ),
-        ComponentDetail(
-            name='Sleep and Recovery Monitor',
-            description='Component for users to input and analyze their sleep patterns and recovery metrics.',
-            relevant_details=[
-                'Offers insights on sleep quality and improvement suggestions.',
-                'Integrates with user-reported data for holistic analysis.'
+        },
+        {
+            "name": "Sleep and Recovery Monitor",
+            "description": "Component for users to input and analyze their sleep patterns and recovery metrics.",
+            "relevant_details": [
+                "Offers insights on sleep quality and improvement suggestions.",
+                "Integrates with user-reported data for holistic analysis."
             ]
-        ),
-        ComponentDetail(
-            name='Insight Generation Engine',
-            description='Analyzes user data to provide personalized insights and recommendations.',
-            relevant_details=[
-                'Utilizes machine learning to adapt insights over time.',
-                'Focuses on a holistic view of health and fitness.'
+        },
+        {
+            "name": "Insight Generation Engine",
+            "description": "Analyzes user data to provide personalized insights and recommendations.",
+            "relevant_details": [
+                "Utilizes machine learning to adapt insights over time.",
+                "Focuses on a holistic view of health and fitness."
             ]
-        ),
-        ComponentDetail(
-            name='Community Engagement Platform',
-            description='Facilitates user interaction and support through forums and social features.',
-            relevant_details=[
-                'Encourages sharing of experiences and motivation.',
-                'Maintains a safe and secure environment for user discussions.'
+        },
+        {
+            "name": "Community Engagement Platform",
+            "description": "Facilitates user interaction and support through forums and social features.",
+            "relevant_details": [
+                "Encourages sharing of experiences and motivation.",
+                "Maintains a safe and secure environment for user discussions."
             ]
-        ),
-        ComponentDetail(
-            name='Goal Setting Framework',
-            description='Allows users to set, track, and achieve personal health and fitness goals.',
-            relevant_details=[
-                'Incorporates progress tracking and milestone achievements.',
-                'Aligns with user preferences for motivation.'
+        },
+        {
+            "name": "Goal Setting Framework",
+            "description": "Allows users to set, track, and achieve personal health and fitness goals.",
+            "relevant_details": [
+                "Incorporates progress tracking and milestone achievements.",
+                "Aligns with user preferences for motivation."
             ]
-        )
+        }
     ]
-)
+}
 """
-designer_crew_balanced_pydantic = """
-DesignerCompletionJson(
-    agent_name='balanced_product_designer',
-    is_approved=False,
-    components=[
-        ComponentDetail(
-            name='User Profile Management',
-            description='A component that allows users to create and manage their personal health profiles, including demographics, fitness goals, and health metrics.',
-            relevant_details=[
-                'Supports data input for health conditions, preferences, and fitness aspirations.',
-                'Facilitates personalized insights and recommendations based on user data.'
+designer_crew_balanced_pydantic = """{
+    "agent_name": "balanced_product_designer",
+    "is_approved": false,
+    "components": [
+        {
+            "name": "User Profile Management",
+            "description": "A component that allows users to create and manage their personal health profiles, including demographics, fitness goals, and health metrics.",
+            "relevant_details": [
+                "Supports data input for health conditions, preferences, and fitness aspirations.",
+                "Facilitates personalized insights and recommendations based on user data."
             ]
-        ),
-        ComponentDetail(
-            name='Activity Tracking System',
-            description='An interface for users to log their physical activities, workouts, and exercises, allowing them to track progress over time.',
-            relevant_details=[
-                'Enables users to input data manually about workouts and activities.',
-                'Provides analytics and trends based on user input to encourage motivation.'
+        },
+        {
+            "name": "Activity Tracking System",
+            "description": "An interface for users to log their physical activities, workouts, and exercises, allowing them to track progress over time.",
+            "relevant_details": [
+                "Enables users to input data manually about workouts and activities.",
+                "Provides analytics and trends based on user input to encourage motivation."
             ]
-        ),
-        ComponentDetail(
-            name='Nutrition Logging Module',
-            description='A feature that enables users to record their food intake and monitor nutritional information to support dietary goals.',
-            relevant_details=[
-                'Includes a database of foods and their nutritional values for accurate tracking.',
-                'Encourages users to maintain balanced diets by providing meal suggestions.'
+        },
+        {
+            "name": "Nutrition Logging Module",
+            "description": "A feature that enables users to record their food intake and monitor nutritional information to support dietary goals.",
+            "relevant_details": [
+                "Includes a database of foods and their nutritional values for accurate tracking.",
+                "Encourages users to maintain balanced diets by providing meal suggestions."
             ]
-        ),
-        ComponentDetail(
-            name='Habit Analytics Dashboard',
-            description='A visual representation of user habits related to fitness, nutrition, hydration, and sleep, allowing for self-reflection and improvement.',
-            relevant_details=[
-                'Utilizes charts and graphs to present data trends over time.',
-                'Encourages healthy habits by showing correlations between habits and well-being.'
+        },
+        {
+            "name": "Habit Analytics Dashboard",
+            "description": "A visual representation of user habits related to fitness, nutrition, hydration, and sleep, allowing for self-reflection and improvement.",
+            "relevant_details": [
+                "Utilizes charts and graphs to present data trends over time.",
+                "Encourages healthy habits by showing correlations between habits and well-being."
             ]
-        ),
-        ComponentDetail(
-            name='Personalized Insights Engine',
-            description='An algorithm that analyzes user data and provides tailored recommendations and insights for enhancing overall health and fitness.',
-            relevant_details=[
-                'Generates actionable advice based on user inputs across all tracked domains.',
-                'Respects user privacy and consent through secure data handling.'
+        },
+        {
+            "name": "Personalized Insights Engine",
+            "description": "An algorithm that analyzes user data and provides tailored recommendations and insights for enhancing overall health and fitness.",
+            "relevant_details": [
+                "Generates actionable advice based on user inputs across all tracked domains.",
+                "Respects user privacy and consent through secure data handling."
             ]
-        ),
-        ComponentDetail(
-            name='Privacy and Security Framework',
-            description='A foundational component ensuring that all user data is handled securely, with compliance to privacy regulations and user consent management.',
-            relevant_details=[
-                'Incorporates encryption and secure data storage practices.',
-                'Offers users transparent control over their data sharing preferences.'
+        },
+        {
+            "name": "Privacy and Security Framework",
+            "description": "A foundational component ensuring that all user data is handled securely, with compliance to privacy regulations and user consent management.",
+            "relevant_details": [
+                "Incorporates encryption and secure data storage practices.",
+                "Offers users transparent control over their data sharing preferences."
             ]
-        ),
-        ComponentDetail(
-            name='Feedback and Support System',
-            description='A mechanism for users to provide feedback on the platform and receive support for technical or health-related queries.',
-            relevant_details=[
-                'Facilitates user engagement and continuous improvement of the platform.',
-                'Includes FAQs, chatbot support, and user community features.'
+        },
+        {
+            "name": "Feedback and Support System",
+            "description": "A mechanism for users to provide feedback on the platform and receive support for technical or health-related queries.",
+            "relevant_details": [
+                "Facilitates user engagement and continuous improvement of the platform.",
+                "Includes FAQs, chatbot support, and user community features."
             ]
-        )
+        }
     ]
-)
+}
+```
 """
 
-designer_crew_conservative_pydantic = """
-DesignerCompletionJsonRoot(
-    agent_name="conservative_product_designer",
-    is_approved=False,
-    components=[
-        ComponentDetail(
-            name="User Profile",
-            description=(
-                "A secure area where users can manage their personal information, "
-                "preferences, and consent settings."
-            ),
-            relevant_details=[
+designer_crew_conservative_pydantic = """{
+    "agent_name": "conservative_product_designer",
+    "is_approved": false,
+    "components": [
+        {
+            "name": "User Profile",
+            "description": "A secure area where users can manage their personal information, preferences, and consent settings.",
+            "relevant_details": [
                 "Ensures a consent-driven environment for the user's health data.",
-                "Allows for personalized experiences based on user inputs.",
-            ],
-        ),
-        ComponentDetail(
-            name="Data Entry Interface",
-            description=(
-                "Text-based forms and prompts enabling users to input their health "
-                "and fitness data."
-            ),
-            relevant_details=[
+                "Allows for personalized experiences based on user inputs."
+            ]
+        },
+        {
+            "name": "Data Entry Interface",
+            "description": "Text-based forms and prompts enabling users to input their health and fitness data.",
+            "relevant_details": [
                 "Structured data entry to minimize user errors.",
-                "Focuses on clarity and simplicity in design.",
-            ],
-        ),
-        ComponentDetail(
-            name="Tracking Mechanisms",
-            description=(
-                "Systems that track and log exercises, meals, hydration, sleep, and "
-                "body metrics over time."
-            ),
-            relevant_details=[
+                "Focuses on clarity and simplicity in design."
+            ]
+        },
+        {
+            "name": "Tracking Mechanisms",
+            "description": "Systems that track and log exercises, meals, hydration, sleep, and body metrics over time.",
+            "relevant_details": [
                 "Facilitates a holistic view of lifestyle and performance.",
-                "Emphasizes reliability and consistency in data recording.",
-            ],
-        ),
-        ComponentDetail(
-            name="Personalized Insights Engine",
-            description=(
-                "Analyzes self-reported data to provide tailored feedback and "
-                "recommendations to users."
-            ),
-            relevant_details=[
+                "Emphasizes reliability and consistency in data recording."
+            ]
+        },
+        {
+            "name": "Personalized Insights Engine",
+            "description": "Analyzes self-reported data to provide tailored feedback and recommendations to users.",
+            "relevant_details": [
                 "Utilizes proven algorithms for personalized insights.",
-                "Incorporates potential for incremental improvements in recommendations over time.",
-            ],
-        ),
-        ComponentDetail(
-            name="Compliance and Security Framework",
-            description=(
-                "Architectural layer ensuring adherence to privacy laws and securing "
-                "personal health data."
-            ),
-            relevant_details=[
+                "Incorporates potential for incremental improvements in recommendations over time."
+            ]
+        },
+        {
+            "name": "Compliance and Security Framework",
+            "description": "Architectural layer ensuring adherence to privacy laws and securing personal health data.",
+            "relevant_details": [
                 "Established with future enhancements in mind for advanced security functionalities.",
-                "Focus on maintaining user trust and data integrity.",
-            ],
-        ),
-        ComponentDetail(
-            name="Communication Layer",
-            description=(
-                "Facilitates text-based interactions and notifications between the "
-                "system and users."
-            ),
-            relevant_details=[
+                "Focus on maintaining user trust and data integrity."
+            ]
+        },
+        {
+            "name": "Communication Layer",
+            "description": "Facilitates text-based interactions and notifications between the system and users.",
+            "relevant_details": [
                 "Ensures users receive timely updates and insights.",
-                "Modular approach allows for easy adjustments in communication methods.",
-            ],
-        ),
-    ],
-)
+                "Modular approach allows for easy adjustments in communication methods."
+            ]
+        }
+    ]
+}
 """
 planners_crew_creative_response = "Final Answer: Creative Plan v1"
 
@@ -520,7 +500,196 @@ planners_crew_conservative_response = (
     "Creative Plan v1,Balanced Plan v1,Conservative Plan v1"
 )
 
-reviewer_crew_response = "creative: 75, balanced: 60, conservative: 80"
+reviewer_crew_response = """
+[
+  {
+    "agent_name": "creative_product_designer",
+    "is_approved": false,
+    "components": [
+      {
+        "name": "User Profile Management",
+        "description": "Central hub for users to manage personal information, preferences, and privacy settings.",
+        "relevant_details": [
+          "Facilitates user onboarding and customization.",
+          "Ensures compliance with privacy regulations."
+        ]
+      },
+      {
+        "name": "Activity Tracker",
+        "description": "Mechanism for users to log exercises, workouts, and physical activities.",
+        "relevant_details": [
+          "Supports text-based entry for activities.",
+          "Utilizes adaptive algorithms to suggest future activities."
+        ]
+      },
+      {
+        "name": "Nutrition Log",
+        "description": "Allows users to track meals, hydration, and nutritional intake.",
+        "relevant_details": [
+          "Incorporates a structured data entry format for easy logging.",
+          "Provides personalized dietary recommendations based on user data."
+        ]
+      },
+      {
+        "name": "Habit Formation Module",
+        "description": "Tool for users to set, track, and modify lifestyle habits.",
+        "relevant_details": [
+          "Encourages positive behavior changes through reminders.",
+          "Utilizes gamification to enhance user engagement."
+        ]
+      },
+      {
+        "name": "Sleep and Recovery Monitor",
+        "description": "Component for users to input and analyze their sleep patterns and recovery metrics.",
+        "relevant_details": [
+          "Offers insights on sleep quality and improvement suggestions.",
+          "Integrates with user-reported data for holistic analysis."
+        ]
+      },
+      {
+        "name": "Insight Generation Engine",
+        "description": "Analyzes user data to provide personalized insights and recommendations.",
+        "relevant_details": [
+          "Utilizes machine learning to adapt insights over time.",
+          "Focuses on a holistic view of health and fitness."
+        ]
+      },
+      {
+        "name": "Community Engagement Platform",
+        "description": "Facilitates user interaction and support through forums and social features.",
+        "relevant_details": [
+          "Encourages sharing of experiences and motivation.",
+          "Maintains a safe and secure environment for user discussions."
+        ]
+      },
+      {
+        "name": "Goal Setting Framework",
+        "description": "Allows users to set, track, and achieve personal health and fitness goals.",
+        "relevant_details": [
+          "Incorporates progress tracking and milestone achievements.",
+          "Aligns with user preferences for motivation."
+        ]
+      }
+    ]
+  },
+  {
+    "agent_name": "balanced_product_designer",
+    "is_approved": true,
+    "components": [
+      {
+        "name": "User Profile Management",
+        "description": "A component that allows users to create and manage their personal health profiles, including demographics, fitness goals, and health metrics.",
+        "relevant_details": [
+          "Supports data input for health conditions, preferences, and fitness aspirations.",
+          "Facilitates personalized insights and recommendations based on user data."
+        ]
+      },
+      {
+        "name": "Activity Tracking System",
+        "description": "An interface for users to log their physical activities, workouts, and exercises, allowing them to track progress over time.",
+        "relevant_details": [
+          "Enables users to input data manually about workouts and activities.",
+          "Provides analytics and trends based on user input to encourage motivation."
+        ]
+      },
+      {
+        "name": "Nutrition Logging Module",
+        "description": "A feature that enables users to record their food intake and monitor nutritional information to support dietary goals.",
+        "relevant_details": [
+          "Includes a database of foods and their nutritional values for accurate tracking.",
+          "Encourages users to maintain balanced diets by providing meal suggestions."
+        ]
+      },
+      {
+        "name": "Habit Analytics Dashboard",
+        "description": "A visual representation of user habits related to fitness, nutrition, hydration, and sleep, allowing for self-reflection and improvement.",
+        "relevant_details": [
+          "Utilizes charts and graphs to present data trends over time.",
+          "Encourages healthy habits by showing correlations between habits and well-being."
+        ]
+      },
+      {
+        "name": "Personalized Insights Engine",
+        "description": "An algorithm that analyzes user data and provides tailored recommendations and insights for enhancing overall health and fitness.",
+        "relevant_details": [
+          "Generates actionable advice based on user inputs across all tracked domains.",
+          "Respects user privacy and consent through secure data handling."
+        ]
+      },
+      {
+        "name": "Privacy and Security Framework",
+        "description": "A foundational component ensuring that all user data is handled securely, with compliance to privacy regulations and user consent management.",
+        "relevant_details": [
+          "Incorporates encryption and secure data storage practices.",
+          "Offers users transparent control over their data sharing preferences."
+        ]
+      },
+      {
+        "name": "Feedback and Support System",
+        "description": "A mechanism for users to provide feedback on the platform and receive support for technical or health-related queries.",
+        "relevant_details": [
+          "Facilitates user engagement and continuous improvement of the platform.",
+          "Includes FAQs, chatbot support, and user community features."
+        ]
+      }
+    ]
+  },
+  {
+    "agent_name": "conservative_product_designer",
+    "is_approved": true,
+    "components": [
+      {
+        "name": "User Profile",
+        "description": "A secure area where users can manage their personal information, preferences, and consent settings.",
+        "relevant_details": [
+          "Ensures a consent-driven environment for the user's health data.",
+          "Allows for personalized experiences based on user inputs."
+        ]
+      },
+      {
+        "name": "Data Entry Interface",
+        "description": "Text-based forms and prompts enabling users to input their health and fitness data.",
+        "relevant_details": [
+          "Structured data entry to minimize user errors.",
+          "Focuses on clarity and simplicity in design."
+        ]
+      },
+      {
+        "name": "Tracking Mechanisms",
+        "description": "Systems that track and log exercises, meals, hydration, sleep, and body metrics over time.",
+        "relevant_details": [
+          "Facilitates a holistic view of lifestyle and performance.",
+          "Emphasizes reliability and consistency in data recording."
+        ]
+      },
+      {
+        "name": "Personalized Insights Engine",
+        "description": "Analyzes self-reported data to provide tailored feedback and recommendations to users.",
+        "relevant_details": [
+          "Utilizes proven algorithms for personalized insights.",
+          "Incorporates potential for incremental improvements in recommendations over time."
+        ]
+      },
+      {
+        "name": "Compliance and Security Framework",
+        "description": "Architectural layer ensuring adherence to privacy laws and securing personal health data.",
+        "relevant_details": [
+          "Established with future enhancements in mind for advanced security functionalities.",
+          "Focus on maintaining user trust and data integrity."
+        ]
+      },
+      {
+        "name": "Communication Layer",
+        "description": "Facilitates text-based interactions and notifications between the system and users.",
+        "relevant_details": [
+          "Ensures users receive timely updates and insights.",
+          "Modular approach allows for easy adjustments in communication methods."
+        ]
+      }
+    ]
+  }
+]
+"""
 
 writer_crew_response = "Writer's Final Output"
 
@@ -588,5 +757,4 @@ def get_llm(
         endpoint=os.getenv("AZURE_GPT_4_API_BASE"),
         api_version=os.getenv("AZURE_GPT_4_API_VERSION"),
         temperature=temperature,
-        max_tokens=1000,
     )
